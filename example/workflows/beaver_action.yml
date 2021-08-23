@@ -1,0 +1,29 @@
+name: Deploy status Action
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, labeled, synchronize]
+  issues:
+    types: [labeled, closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # This step checks out a copy of the private repository for our GitHub Actions.
+      - uses: actions/checkout@v1
+        with:
+          repository: simplybusiness/deploy-status-action
+          ref: refs/tags/v1.2
+          # Do not put the actual secret here- only the name of the secret in your repo
+          token: ${{ secrets.PUT_YOUR_GITHUB_PAT_NAME_HERE }}
+          path: './YOUR_REPO_HERE'
+      # This step references the directory that contains the action.
+      - uses: './'
+        env:
+          # This is built in functionality for the github token- do not need to change
+          ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          REPOSITORY: '/simplybusiness/YOUR_REPO_HERE'
+          AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
