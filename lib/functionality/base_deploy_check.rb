@@ -4,6 +4,7 @@ require 'json'
 require 'octokit'
 require_relative 'simply_issue'
 
+# Checks the deploy
 class BaseDeployCheck
   def self.base_check(config, event, sha)
     result = if !config.event_branch.include?('master') && SimplyIssue.get_all_issues(config, event,

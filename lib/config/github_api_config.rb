@@ -1,6 +1,9 @@
-require "octokit"
-require "json"
+# frozen_string_literal: true
 
+require 'octokit'
+require 'json'
+
+# Sets the github client and event payload
 class GithubApiConfig
   def initialize
     @client = Octokit::Client.new(access_token: ENV['ISSUE_TOKEN'])
