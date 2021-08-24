@@ -1,0 +1,31 @@
+name: Ruby CI
+
+on:
+  push:
+    branches:
+
+env:
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+
+    strategy:
+      matrix:
+        ruby-version: [2.6.5]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        run: bundle install
+      - name: Run all tests
+        run: bundle exec rspec specs
+        shell: bash
