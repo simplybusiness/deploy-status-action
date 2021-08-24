@@ -9,7 +9,7 @@ gem 'octokit'
 
 group :development, :test do
   gem 'rspec'
-  gem 'rubocop'
+  gem 'simplycop'
   gem 'vcr'
   gem 'webmock'
 end
