@@ -16,6 +16,7 @@ class BaseDeployCheck
              end
     puts "Created #{result[:state]} state with description #{result[:description]} for sha #{sha} and url #{result[:url]}"
     puts '================================================================================================'
+    result
   end
 
   def self.context_name

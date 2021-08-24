@@ -13,6 +13,7 @@ class PrDeployCheck < BaseDeployCheck
                                            'success', description: 'You are free to deploy', context: context_name)
       puts "Created #{result[:state]} state with description #{result[:description]} for sha #{config.event_payload['pull_request']['head']['sha']} and url #{result[:url]}"
       puts '================================================================================================================================================================'
+      result
     end
   end
 end
