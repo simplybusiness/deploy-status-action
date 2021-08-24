@@ -21,7 +21,7 @@ RSpec.describe PrDeployCheck do
 
     it 'returns a success for the deploy check' do
       config =  GithubApiConfig.new
-      VCR.use_cassette('override deploy update success') do
+      VCR.use_cassette('emergency deploy update success') do
         response = PrDeployCheck.check_labeled_pr(config)
         expect(response['state']).to eq('success')
       end

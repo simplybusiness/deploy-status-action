@@ -37,7 +37,7 @@ RSpec.describe 'SimplyIssue' do
       config = GithubApiConfig.new
       VCR.use_cassette('all prs') do
         response = SimplyIssue.get_all_issues(config, 'pull_request')
-        expect(response.length).to be.positive?
+        expect(response.length).to be_positive
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe 'SimplyIssue' do
       config = GithubApiConfig.new
       VCR.use_cassette('all issues with blocked_deploy tag') do
         response = SimplyIssue.get_all_issues(config, 'issues', 'blocked_deploy')
-        expect(response.length).to be.positive?
+        expect(response.length).to be_positive
       end
     end
   end

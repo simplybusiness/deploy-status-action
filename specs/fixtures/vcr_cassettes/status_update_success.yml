@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.github.com/repos/simplybusiness/chopin/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
     body:
       encoding: UTF-8
-      string: '{"description":"The Deploy is free","context":"Deploy","state":"success"}'
+      string: '{"description":"The Deploy is free","context":"Deploy Status","state":"success"}'
     headers:
       Accept:
       - application/vnd.github.v3+json
@@ -76,7 +76,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"url":"https://api.github.com/repos/simplybusiness/chopin/statuses/63f739d5586b2c6b718045893789d620e0d0aee9","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","id":7972500920,"node_id":"MDEzOlN0YXR1c0NvbnRleHQ3OTcyNTAwOTIw","state":"success","description":"The
-        Deploy is free","target_url":null,"context":"Deploy","created_at":"2019-10-25T17:22:20Z","updated_at":"2019-10-25T17:22:20Z","creator":{"login":"DrewCurd","id":44407969,"node_id":"MDQ6VXNlcjQ0NDA3OTY5","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","gravatar_id":"","url":"https://api.github.com/users/DrewCurd","html_url":"https://github.com/DrewCurd","followers_url":"https://api.github.com/users/DrewCurd/followers","following_url":"https://api.github.com/users/DrewCurd/following{/other_user}","gists_url":"https://api.github.com/users/DrewCurd/gists{/gist_id}","starred_url":"https://api.github.com/users/DrewCurd/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/DrewCurd/subscriptions","organizations_url":"https://api.github.com/users/DrewCurd/orgs","repos_url":"https://api.github.com/users/DrewCurd/repos","events_url":"https://api.github.com/users/DrewCurd/events{/privacy}","received_events_url":"https://api.github.com/users/DrewCurd/received_events","type":"User","site_admin":false}}'
+        Deploy is free","target_url":null,"context":"Deploy Status","created_at":"2019-10-25T17:22:20Z","updated_at":"2019-10-25T17:22:20Z","creator":{"login":"DrewCurd","id":44407969,"node_id":"MDQ6VXNlcjQ0NDA3OTY5","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","gravatar_id":"","url":"https://api.github.com/users/DrewCurd","html_url":"https://github.com/DrewCurd","followers_url":"https://api.github.com/users/DrewCurd/followers","following_url":"https://api.github.com/users/DrewCurd/following{/other_user}","gists_url":"https://api.github.com/users/DrewCurd/gists{/gist_id}","starred_url":"https://api.github.com/users/DrewCurd/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/DrewCurd/subscriptions","organizations_url":"https://api.github.com/users/DrewCurd/orgs","repos_url":"https://api.github.com/users/DrewCurd/repos","events_url":"https://api.github.com/users/DrewCurd/events{/privacy}","received_events_url":"https://api.github.com/users/DrewCurd/received_events","type":"User","site_admin":false}}'
     http_version:
   recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
 recorded_with: VCR 3.0.3
