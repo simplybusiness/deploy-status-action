@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        ruby-version: [2.6.5]
+        ruby-version: [2.7.1]
 
     steps:
       - uses: actions/checkout@v2
