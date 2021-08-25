@@ -8,7 +8,6 @@ require_relative '../lib/functionality/issue_deploy_check'
 require_relative '../lib/functionality/base_deploy_check'
 
 RSpec.describe 'SimplyIssue' do
-  SPEC_FIXTURES_PATH = File.expand_path('fixtures', __dir__)
   before do
     ENV['REPOSITORY'] = '/simplybusiness/chopin'
     ENV['ISSUE_TOKEN'] = 'fake_token'

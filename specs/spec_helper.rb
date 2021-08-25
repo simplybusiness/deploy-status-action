@@ -3,6 +3,8 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require_relative 'helpers/test_helper_global_methods'
+SPEC_FIXTURES_PATH = File.expand_path('fixtures', __dir__)
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

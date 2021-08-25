@@ -4,6 +4,7 @@ require 'json'
 require 'octokit'
 require_relative 'simply_issue'
 
+# Check if the deploy status issue created is already present
 class IssueDeployCheck < BaseDeployCheck
   def self.check_current_issue(config)
     label_tags = SimplyIssue.get_label_tags(config)
@@ -26,9 +27,12 @@ class IssueDeployCheck < BaseDeployCheck
     config.client.auto_paginate = true
     all_pull_requests = SimplyIssue.get_all_issues(config, 'pull_request')
     all_pull_requests.each do |pr|
-      result = config.client.create_status(config.app_repo, pr['head']['sha'], status, description: message,
-                                                                                       context: context_name)
-      puts "Created #{result[:state]} state with description #{result[:description]} for PR #{pr.number} and url #{result[:url]}"
+      result = config.client.create_status(
+        config.app_repo, pr['head']['sha'], status, description: message,
+                                                    context: context_name
+      )
+      puts "Created #{result[:state]} state with" \
+           " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}"
       puts '============================================================================================'
     end
   end

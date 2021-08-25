@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:2.7.1
 
 LABEL "com.github.actions.name"="Deploy Issue Workflow"
 LABEL "com.github.actions.description"="Check if deploy is blocked"

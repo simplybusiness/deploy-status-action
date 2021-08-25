@@ -30,8 +30,10 @@ begin
   end
 rescue StandardError => e
   puts "Unexpected error occurred: #{e.message}"
-  Airbrake.notify_sync(e, {
-                         repo: 'simplybusiness/deploy-status-action',
-                         github_action: 'deploy_action'
-                       })
+  Airbrake.notify_sync(
+    e, {
+      repo: 'simplybusiness/deploy-status-action',
+      github_action: 'deploy_action'
+    }
+  )
 end

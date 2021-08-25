@@ -1,0 +1,15 @@
+inherit_gem:
+  simplycop: .simplycop.yml
+
+AllCops:
+  TargetRubyVersion: 2.7.1
+  Rails:
+    Enabled: false
+  Documentation:
+    Enabled: false
+Metrics/BlockLength:
+  Max: 250
+Metrics/AbcSize:
+  Max: 20
+Metrics/MethodLength:
+  Max: 25
