@@ -10,7 +10,7 @@ require_relative '../lib/functionality/base_deploy_check'
 RSpec.describe PrDeployCheck do
   context 'when pr is labeled with emergency deploy tag' do
     before do
-      ENV['REPOSITORY'] = '/simplybusiness/chopin'
+      ENV['GITHUB_REPOSITORY'] = 'simplybusiness/chopin'
       ENV['ISSUE_TOKEN'] = 'fake_token'
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
       ENV['GITHUB_REF'] = 'ref/my/base/branch'

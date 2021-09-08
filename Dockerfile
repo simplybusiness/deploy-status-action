@@ -2,7 +2,7 @@ FROM ruby:2.7.1
 
 LABEL maintainer="simplybusiness <opensourcetech@simplybusiness.co.uk>"
 
-ENV BUNDLER_VERSION="2.1.4"
+ENV BUNDLER_VERSION="2.2.26"
 
 RUN gem install bundler --version "${BUNDLER_VERSION}"
 

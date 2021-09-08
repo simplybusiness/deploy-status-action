@@ -25,5 +25,4 @@ jobs:
         env:
           # This is built in functionality for the github token- do not need to change
           ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          REPOSITORY: '/simplybusiness/YOUR_REPO_HERE'
           AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
