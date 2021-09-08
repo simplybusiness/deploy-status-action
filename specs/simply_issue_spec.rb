@@ -9,7 +9,7 @@ require_relative '../lib/functionality/base_deploy_check'
 
 RSpec.describe 'SimplyIssue' do
   before do
-    ENV['GITHUB_REPOSITORY'] = '/simplybusiness/chopin'
+    ENV['GITHUB_REPOSITORY'] = 'simplybusiness/chopin'
     ENV['ISSUE_TOKEN'] = 'fake_token'
   end
 
