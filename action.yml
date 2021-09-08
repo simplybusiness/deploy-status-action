@@ -1,0 +1,9 @@
+name: "Deploy Status Action"
+description: "Check if the deployment is blocked"
+author: "simplybusiness"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: filter
+  color: red

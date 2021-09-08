@@ -1,9 +1,5 @@
 FROM ruby:2.7.1
 
-LABEL "com.github.actions.name"="Deploy Issue Workflow"
-LABEL "com.github.actions.description"="Check if deploy is blocked"
-LABEL "com.github.actions.icon"="filter"
-LABEL "com.github.actions.color"="red"
 LABEL maintainer="simplybusiness <opensourcetech@simplybusiness.co.uk>"
 
 ENV BUNDLER_VERSION="2.1.4"
