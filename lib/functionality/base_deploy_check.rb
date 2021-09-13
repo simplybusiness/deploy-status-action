@@ -6,7 +6,7 @@ require_relative 'simply_issue'
 
 # Checks the deploy checks present
 class BaseDeployCheck
-  def self.base_check(config, event, sha) # rubocop:disable Metrics/AbcSize
+  def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
     result = if SimplyIssue.get_all_issues(
       config, event,
