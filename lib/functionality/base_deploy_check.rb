@@ -8,7 +8,7 @@ require_relative 'simply_issue'
 class BaseDeployCheck
   def self.base_check(config, event, sha) # rubocop:disable Metrics/AbcSize
     puts "config event branch  #{config.event_branch}"
-    result = if !config.event_branch.include?('master') && SimplyIssue.get_all_issues(
+    result = if SimplyIssue.get_all_issues(
       config, event,
       'block deploys'
     ).length.positive?
