@@ -13,20 +13,6 @@ RSpec.describe 'BaseDeployCheck' do
 
   let(:config) { GithubApiConfig.new }
 
-  context 'when branch is master' do
-    it 'returns a success for the deploy check' do
-      ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('push_payload.json').to_s
-      ENV['GITHUB_REF'] = 'ref/master'
-      ENV['GITHUB_EVENT_NAME'] = 'push'
-      sha = '63f739d5586b2c6b718045893789d620e0d0aee9'
-
-      VCR.use_cassette('status update success') do
-        response = PrDeployCheck.base_check(config, 'issues', sha)
-        expect(response['state']).to eq('success')
-      end
-    end
-  end
-
   context 'when there are no blocked deploy issues' do
     it 'returns a success for the deploy check' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('open_pr_payload.json').to_s
