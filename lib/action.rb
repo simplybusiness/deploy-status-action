@@ -11,13 +11,11 @@ require_relative 'functionality/base_deploy_check'
 
 begin
   config = GithubApiConfig.new
-  puts "Event: #{config.event_name} called"
   case config.event_name
   when 'pull_request', 'pull_request_target'
     if config.event_payload['action'] == 'opened' || config.event_payload['action'] == 'synchronize'
       puts 'Pull request is opened or synchronized'
       puts '============================================='
-      puts config.event_payload
       PrDeployCheck.base_check(config, 'issues', config.event_payload['pull_request']['head']['sha'])
     else
       puts 'Pull request is labeled'
