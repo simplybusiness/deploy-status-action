@@ -6,7 +6,7 @@ require 'octokit'
 # Fetch the labels on PR and issue
 class SimplyIssue
   def self.get_label_tags(config)
-    if config.event_name == 'pull_request'
+    if  %w[pull_request pull_request_target].include?(config.event_name)
       puts config.event_payload['number']
       issue = config.client.pull_request(config.app_repo, config.event_payload['number'])
     else
