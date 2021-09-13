@@ -13,7 +13,7 @@ begin
   config = GithubApiConfig.new
   puts "Event: #{config.event_name} called"
   case config.event_name
-  when 'pull_request'
+  when 'pull_request_target' || 'pull_request'
     if config.event_payload['action'] == 'opened' || config.event_payload['action'] == 'synchronize'
       puts 'Pull request is opened or synchronized'
       puts '============================================='
