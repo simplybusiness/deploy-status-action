@@ -17,6 +17,7 @@ begin
     if config.event_payload['action'] == 'opened' || config.event_payload['action'] == 'synchronize'
       puts 'Pull request is opened or synchronized'
       puts '============================================='
+      puts config.event_payload
       PrDeployCheck.base_check(config, 'issues', config.event_payload['pull_request']['head']['sha'])
     else
       puts 'Pull request is labeled'
