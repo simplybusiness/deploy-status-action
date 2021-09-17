@@ -2,8 +2,12 @@ name: "Deploy Status Action"
 description: "Check if the deployment is blocked"
 author: "simplybusiness"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'composite'
+  steps:
+    -
+      run: |
+        bundle exec ruby action/lib/action.rb
+      shell: bash
 branding:
   icon: filter
   color: red
