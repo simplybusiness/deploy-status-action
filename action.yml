@@ -8,7 +8,9 @@ runs:
     - uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.7.1
-      - run: bundle exec ruby lib/action.rb
+      - run: |
+        bundle exec ruby lib/action.rb
+      shell: bash
 branding:
   icon: filter
   color: red
