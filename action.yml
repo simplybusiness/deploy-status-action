@@ -4,10 +4,11 @@ author: "simplybusiness"
 runs:
   using: 'composite'
   steps:
-    -
-      run: |
-        bundle exec ruby action/lib/action.rb
-      shell: bash
+    - uses: actions/checkout@v2
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.1
+      - run: bundle exec ruby lib/action.rb
 branding:
   icon: filter
   color: red
