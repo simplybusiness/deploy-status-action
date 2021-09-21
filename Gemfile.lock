@@ -9,7 +9,7 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    airbrake-ruby (5.2.1)
+    airbrake-ruby (6.0.0)
       rbtree3 (~> 0.5)
     ast (2.4.2)
     concurrent-ruby (1.1.9)
