@@ -33,12 +33,12 @@ specific PR.
          - uses: actions/checkout@v2
            with:
              repository: 'simplybusiness/deploy-status-action'
-             ref: 'v0.4.0'
+             ref: 'v0.4.1'
          - uses: ruby/setup-ruby@v1
            with:
              bundler-cache: true # runs 'bundle install' and caches installed gems automatically                       
          - name: Deploy Status Action
-           uses: simplybusiness/deploy-status-action@v0.4.0
+           uses: simplybusiness/deploy-status-action@v0.4.1
            env:
              ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
              AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
