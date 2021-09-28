@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/repos/simplybusiness/chopin/pulls/13030
+    uri: https://api.github.com/repos/simplybusiness/important-app/pulls/13030
     body:
       encoding: US-ASCII
       string: ''
@@ -75,12 +75,12 @@ http_interactions:
       - B1BE:15C6:1E99AB:382E11:5DB3494E
     body:
       encoding: UTF-8
-      string: '{"labels":[{"id":1638720027,"node_id":"MDU6TGFiZWwxNjM4NzIwMDI3","url":"https://api.github.com/repos/simplybusiness/chopin/labels/emergency deploy","name":"emergency deploy","color":"065bcc","default":false}]}'
+      string: '{"labels":[{"id":1638720027,"node_id":"MDU6TGFiZWwxNjM4NzIwMDI3","url":"https://api.github.com/repos/simplybusiness/important-app/labels/emergency deploy","name":"emergency deploy","color":"065bcc","default":false}]}'
     http_version:
   recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
 - request:
     method: post
-    uri: https://api.github.com/repos/simplybusiness/chopin/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
+    uri: https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
     body:
       encoding: UTF-8
       string: '{"description":"The Deploy is free","context":"Deploy Status","state":"success"}'
@@ -127,7 +127,7 @@ http_interactions:
       X-Accepted-Oauth-Scopes:
       - ''
       Location:
-      - https://api.github.com/repos/simplybusiness/chopin/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
+      - https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
       X-Github-Media-Type:
       - github.v3; format=json
       Access-Control-Expose-Headers:
@@ -152,7 +152,7 @@ http_interactions:
       - D85E:3D41:375D7D:5FF61C:5DB3494F
     body:
       encoding: UTF-8
-      string: '{"url":"https://api.github.com/repos/simplybusiness/chopin/statuses/63f739d5586b2c6b718045893789d620e0d0aee9","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","id":7973467635,"node_id":"MDEzOlN0YXR1c0NvbnRleHQ3OTczNDY3NjM1","state":"success","description":"The
+      string: '{"url":"https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","id":7973467635,"node_id":"MDEzOlN0YXR1c0NvbnRleHQ3OTczNDY3NjM1","state":"success","description":"The
         Deploy is free","target_url":null,"context":"Deploy Status","created_at":"2019-10-25T19:13:19Z","updated_at":"2019-10-25T19:13:19Z","creator":{"login":"DrewCurd","id":44407969,"node_id":"MDQ6VXNlcjQ0NDA3OTY5","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","gravatar_id":"","url":"https://api.github.com/users/DrewCurd","html_url":"https://github.com/DrewCurd","followers_url":"https://api.github.com/users/DrewCurd/followers","following_url":"https://api.github.com/users/DrewCurd/following{/other_user}","gists_url":"https://api.github.com/users/DrewCurd/gists{/gist_id}","starred_url":"https://api.github.com/users/DrewCurd/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/DrewCurd/subscriptions","organizations_url":"https://api.github.com/users/DrewCurd/orgs","repos_url":"https://api.github.com/users/DrewCurd/repos","events_url":"https://api.github.com/users/DrewCurd/events{/privacy}","received_events_url":"https://api.github.com/users/DrewCurd/received_events","type":"User","site_admin":false}}'
     http_version:
   recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
