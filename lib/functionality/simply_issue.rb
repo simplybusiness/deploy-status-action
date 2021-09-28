@@ -24,4 +24,11 @@ class SimplyIssue
       config.client.list_issues(config.app_repo, state: 'open', direction: 'desc', labels: label)
     end
   end
+
+  def self.block_deploys?(config, event)
+    return false unless get_all_issues(config, event, 'block deploys').length.positive?
+
+    label_tags = SimplyIssue.get_label_tags(config)
+    !label_tags.include?('emergency deploy')
+  end
 end
