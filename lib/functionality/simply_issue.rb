@@ -29,6 +29,7 @@ class SimplyIssue
     return false unless get_all_issues(config, event, 'block deploys').length.positive?
 
     label_tags = SimplyIssue.get_label_tags(config)
+    puts "label_tags: #{label_tags}"
     label_tags.length.positive? && !label_tags.include?('emergency deploy')
   end
 end
