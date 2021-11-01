@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: deploy-status-action
+  description: GitHub action to provide status and ability to block releases by creating an issue
+spec:
+  type: github-action
+  lifecycle: production
