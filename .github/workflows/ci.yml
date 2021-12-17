@@ -2,8 +2,10 @@ name: Ruby CI
 
 on:
   push:
-    branches:
-
+    
+permissions:
+  contents: read
+  
 env:
   CI: true
 
