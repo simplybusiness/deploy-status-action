@@ -1,0 +1,25 @@
+name: Deploy Status
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    types: [opened, labeled, synchronize]
+  issues:
+    types: [labeled, closed]
+
+permissions:
+  checks: read
+  issues: read
+  pull-requests: read
+  statuses: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Status Action
+        uses: simplybusiness/deploy-status-action@v0.3.0
+        env:
+          ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
