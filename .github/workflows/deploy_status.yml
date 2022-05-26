@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Status Action
-        uses: simplybusiness/deploy-status-action@v0.3.0
+        uses: simplybusiness/deploy-status-action@v0.4.1
         env:
           ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
