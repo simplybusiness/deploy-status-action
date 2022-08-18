@@ -11,6 +11,8 @@ require_relative 'functionality/base_deploy_check'
 
 begin
   config = GithubApiConfig.new
+  puts "hello I am on the branch"
+
   case config.event_name
   when 'pull_request', 'pull_request_target'
     if config.event_payload['action'] == 'opened' || config.event_payload['action'] == 'synchronize'
