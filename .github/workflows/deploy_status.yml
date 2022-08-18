@@ -1,7 +1,7 @@
 name: Deploy Status
 
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - master
     types: [opened, labeled, synchronize]
@@ -23,7 +23,7 @@ jobs:
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Deploy Status Action
-        uses: simplybusiness/deploy-status-action@v0.4.1
+        uses: ./
         env:
           ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
