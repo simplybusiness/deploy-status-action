@@ -5,7 +5,7 @@ require 'octokit'
 
 # Fetch the labels on PR and issue
 class SimplyIssue
-  def self.get_label_tags(config) # rubocop:disable Metrics/AbcSize
+  def self.get_label_tags(config)
     if ['pull_request', 'pull_request_target'].include?(config.event_name)
       puts "Pull request #{config.event_payload['number']}"
       issue = config.client.pull_request(config.app_repo, config.event_payload['number'])
