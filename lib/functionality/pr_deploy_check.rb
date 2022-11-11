@@ -13,8 +13,10 @@ class PrDeployCheck < BaseDeployCheck
 
     sha = config.event_payload['pull_request']['head']['sha']
     result = config.client.create_status(
-      config.app_repo, sha,
-      'success', description: 'You are free to deploy', context: context_name
+      config.app_repo, sha, 'success',
+      description: 'You are free to deploy',
+      context: context_name,
+      target_url: config.event_payload['html_url']
     )
     puts "Created #{result[:state]} state with" \
          "description #{result[:description]} for sha #{sha} and url #{result[:url]}"

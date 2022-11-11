@@ -10,13 +10,17 @@ class BaseDeployCheck
     puts "config event branch  #{config.event_branch}"
     result = if SimplyIssue.block_deploys?(config, event)
                config.client.create_status(
-                 config.app_repo, sha, 'failure', description: 'Deploys are blocked',
-                                                  context: context_name
+                 config.app_repo, sha, 'failure',
+                 description: 'Deploys are blocked',
+                 context: context_name,
+                 target_url: config.event_payload['html_url']
                )
              else
                config.client.create_status(
-                 config.app_repo, sha, 'success', description: 'You are free to deploy',
-                                                  context: context_name
+                 config.app_repo, sha, 'success',
+                 description: 'You are free to deploy',
+                 context: context_name,
+                 target_url: config.event_payload['html_url']
                )
              end
     puts "Created #{result[:state]} state with description #{result[:description]}"

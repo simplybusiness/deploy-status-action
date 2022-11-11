@@ -28,8 +28,10 @@ class IssueDeployCheck < BaseDeployCheck
     all_pull_requests = SimplyIssue.get_all_issues(config, 'pull_request')
     all_pull_requests.each do |pr|
       result = config.client.create_status(
-        config.app_repo, pr['head']['sha'], status, description: message,
-                                                    context: context_name
+        config.app_repo, pr['head']['sha'], status,
+        description: message,
+        context: context_name,
+        target_url: config.event_payload['html_url']
       )
       puts "Created #{result[:state]} state with" \
            " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}"
