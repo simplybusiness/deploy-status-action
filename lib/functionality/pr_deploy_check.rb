@@ -19,7 +19,8 @@ class PrDeployCheck < BaseDeployCheck
       target_url: config.event_payload['html_url']
     )
     puts "Created #{result[:state]} state with" \
-         "description #{result[:description]} for sha #{sha} and url #{result[:url]}"
+         "description #{result[:description]} for sha #{sha} for url #{result[:url]} " \
+         "with target_url #{config.event_payload['html_url']}"
     puts '============================================================================================'
     result
   end
