@@ -30,11 +30,11 @@ class IssueDeployCheck < BaseDeployCheck
       result = config.client.create_status(
         config.app_repo, pr['head']['sha'], status,
         description: message,
-        options: { context: context_name, target_url: config.event_payload['html_url'] }
+        context: context_name,
+        target_url: config.event_payload['html_url']
       )
       puts "Created #{result[:state]} state with" \
-           " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}" \
-           " with target_url #{config.event_payload['html_url']}"
+           " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}"
       puts '============================================================================================'
     end
   end
