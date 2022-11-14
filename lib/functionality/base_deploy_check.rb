@@ -12,7 +12,7 @@ class BaseDeployCheck
                config.client.create_status(
                  config.app_repo, sha, 'failure',
                  description: 'Deploys are blocked',
-                 options: {context: context_name, target_url: config.event_payload['html_url']}
+                 options: { context: context_name, target_url: config.event_payload['html_url'] }
                )
              else
                config.client.create_status(
