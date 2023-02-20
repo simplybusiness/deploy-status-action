@@ -17,7 +17,7 @@ class IssueDeployCheck < BaseDeployCheck
     when 'labeled'
       create_status_for_all_prs(config, 'failure', 'Deploys are blocked')
     when 'closed'
-      if SimplyIssue.get_all_issues(config, 'issues', 'block deploys').length.zero?
+      if SimplyIssue.get_all_issues(config, 'issues', 'block deploys').empty?
         create_status_for_all_prs(config, 'success', 'You are free to deploy')
       end
     end

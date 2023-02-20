@@ -26,6 +26,7 @@ RSpec.describe 'BaseDeployCheck' do
       end
     end
   end
+
   context 'when there are blocked deploy issues' do
     it 'returns a failure for the deploy check' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('open_pr_payload.json').to_s
