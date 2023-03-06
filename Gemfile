@@ -14,4 +14,4 @@ group :development, :test do
   gem 'webmock'
 end
 
-gem "faraday-retry", "~> 2.0"
+gem "faraday-retry", "~> 2.1"
