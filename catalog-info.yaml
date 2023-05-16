@@ -2,6 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: deploy-status-action
+  title: Deploy Status Action
   description: GitHub action to provide status and ability to block releases by creating an issue
   annotations:
     backstage.io/techdocs-ref: dir:.
