@@ -32,9 +32,9 @@ class IssueDeployCheck < BaseDeployCheck
         description: message,
         options: { context: context_name, target_url: config.event_payload['html_url'] }
       )
-      puts "Created #{result[:state]} state with" \
-           " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}" \
-           " with target_url #{config.event_payload['html_url']}"
+      puts "Created #{result[:state]} state with " \
+           "description #{result[:description]} for PR #{pr.number} and url #{result[:url]} " \
+           "with target_url #{config.event_payload['html_url']}"
       puts '============================================================================================'
     end
   end
