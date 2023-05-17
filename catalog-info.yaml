@@ -3,8 +3,6 @@ kind: Component
 metadata:
   name: deploy-status-action
   description: GitHub action to provide status and ability to block releases by creating an issue
-  annotations:
-    backstage.io/techdocs-ref: dir:.
 spec:
   type: GitHub Action
   lifecycle: production
