@@ -26,7 +26,7 @@ class BaseDeployCheck
                  target_url: config.event_payload['html_url']
                )
              end
-    puts "Created #{result[:state]} state with description #{result[:description]}"
+    puts "TEMP KARAN Created #{result[:state]} state with description #{result[:description]}"
     print "for sha #{sha} and url #{result[:url]}"
     puts '========================================================================='
     result
