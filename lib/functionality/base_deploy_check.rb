@@ -9,8 +9,6 @@ class BaseDeployCheck
   def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
 
-    puts "TEMP KARAN#{config.client.statuses(config.app_repo, sha)}"
-
     result = if SimplyIssue.block_deploys?(config, event)
                config.client.create_status(
                  config.app_repo, sha, 'failure',
@@ -26,7 +24,7 @@ class BaseDeployCheck
                  target_url: config.event_payload['html_url']
                )
              end
-    puts "TEMP KARAN Created #{result[:state]} state with description #{result[:description]}"
+    puts "Created #{result[:state]} state with description #{result[:description]}"
     print "for sha #{sha} and url #{result[:url]}"
     puts '========================================================================='
     result
