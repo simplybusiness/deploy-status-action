@@ -8,7 +8,6 @@ require_relative 'simply_issue'
 class BaseDeployCheck
   def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
-
     result = if SimplyIssue.block_deploys?(config, event)
                config.client.create_status(
                  config.app_repo, sha, 'failure',
