@@ -3,7 +3,12 @@ kind: Component
 metadata:
   name: deploy-status-action
   title: Deploy Status Action
-  description: GitHub action to provide status and ability to block releases by creating an issue
+  description: GitHub Action to provide status and ability to block releases by creating an issue
 spec:
-  type: GitHub Action
+  type: gitHub action
   lifecycle: production
+  dependsOn:
+    - "Resource:github-actions"
+  consumesAPI:
+    - github-rest-api
+  system: github
