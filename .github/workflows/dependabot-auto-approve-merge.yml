@@ -1,6 +1,10 @@
 name: "Dependabot auto approve and merge"
-on: 
+on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
     branches:
       - master
 
@@ -9,19 +13,10 @@ permissions:
   contents: write
 
 jobs:
-  dependabot:
-    runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
-    steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v1.3.6
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Approve and Enable auto-merge for Dependabot PRs
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
-        run: |
-          gh pr review --approve "$PR_URL" -b "@dependabot merge"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.SB_SILVERSMITHS_BOT}}
+  dependabot-auto-merge-all:
+    uses: simplybusiness/github-action-reusable-workflows/.github/workflows/dependabot-auto-approve-and-merge-minor-patch.yaml@v1
+    with:
+      pr_url: ${{ github.event.pull_request.html_url }}
+      actor: ${{ github.actor }}
+    secrets:
+      github-token: ${{secrets.SB_SILVERSMITHS_BOT}}
