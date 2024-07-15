@@ -21,9 +21,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
       - name: Deploy Status Action
         uses: ./
         env:
           ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
+          AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
