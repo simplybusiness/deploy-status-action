@@ -4,11 +4,13 @@ require_relative 'spec_helper'
 require_relative '../lib/config/github_api_config'
 require_relative '../lib/functionality/base_deploy_check'
 require_relative '../lib/functionality/pr_deploy_check'
+require 'jwt'
 
 RSpec.describe 'BaseDeployCheck' do
   before do
     ENV['GITHUB_REPOSITORY'] = 'simplybusiness/important-app'
-    ENV['ISSUE_TOKEN'] = 'fake_token'
+    ENV['CLIENT_ID'] = 'client_id'
+    ENV['PRIVATE_KEY'] = JWT::JWK.new(OpenSSL::PKey::RSA.new(2048)).keypair.to_pem
   end
 
   let(:config) { GithubApiConfig.new }

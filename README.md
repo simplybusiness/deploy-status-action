@@ -40,8 +40,9 @@ specific PR.
          - name: Deploy Status Action
            uses: simplybusiness/deploy-status-action@v0.4.1
            env:
-             ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}" # Can provide CLIENT_ID and CLIENT_SECRET instead of an ISSUE_TOKEN
-             AIRBRAKE_KEY: ${{secrets.GH_AIRBRAKE_KEY}}
+             PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+             CLIENT_ID: ${{ secrets.CLIENT_ID }}
+             AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
     ```
    **NOTE:** We recommend you use `pull_request_target` event as mentioned in example as it will work when you create
    PRs from a forked repository with provided permission. You can also use `pull_request` event but that will work only
