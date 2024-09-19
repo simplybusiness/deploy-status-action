@@ -40,8 +40,8 @@ specific PR.
          - name: Deploy Status Action
            uses: simplybusiness/deploy-status-action@v0.4.1
            env:
-             PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
              CLIENT_ID: ${{ secrets.CLIENT_ID }}
+             PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
              AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
     ```
    **NOTE:** We recommend you use `pull_request_target` event as mentioned in example as it will work when you create
