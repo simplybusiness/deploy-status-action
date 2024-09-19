@@ -10,7 +10,8 @@ require_relative '../lib/functionality/base_deploy_check'
 RSpec.describe 'SimplyIssue' do
   before do
     ENV['GITHUB_REPOSITORY'] = 'simplybusiness/important-app'
-    ENV['ISSUE_TOKEN'] = 'fake_token'
+    ENV['CLIENT_ID'] = 'client_id'
+    ENV['PRIVATE_KEY'] = JWT::JWK.new(OpenSSL::PKey::RSA.new(2048)).keypair.to_pem
   end
 
   let(:config) { GithubApiConfig.new }
