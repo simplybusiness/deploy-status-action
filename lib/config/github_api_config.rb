@@ -6,7 +6,14 @@ require 'json'
 # Sets the github client and event payload
 class GithubApiConfig
   def initialize
-    @client = Octokit::Client.new(access_token: ENV.fetch('ISSUE_TOKEN'))
+    @client = if ENV['ISSUE_TOKEN'] && !ENV['ISSUE_TOKEN'].empty?
+                Octokit::Client.new(access_token: ENV['ISSUE_TOKEN'])
+              else
+                Octokit::Client.new(
+                  client_id: ENV.fetch('CLIENT_ID'),
+                  client_secret: ENV.fetch('CLIENT_SECRET')
+                )
+              end
     @app_repo = Octokit::Repository.new(ENV.fetch('GITHUB_REPOSITORY'))
     @event_payload = JSON.parse(File.read(ENV.fetch('GITHUB_EVENT_PATH')))
     @event_name = ENV.fetch('GITHUB_EVENT_NAME')
