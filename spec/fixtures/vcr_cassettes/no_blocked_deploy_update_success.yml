@@ -2,6 +2,136 @@
 http_interactions:
 - request:
     method: get
+    uri: https://api.github.com/repos/simplybusiness/important-app/installation
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 9.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer fake_token
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 23 Sep 2024 09:14:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept,Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"d47e453d53446b709fa8264a4d6e2bbcd75f60536550e663d6b722fc4f80915e"
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - github.com
+      X-Github-Request-Id:
+      - 2C58:146F76:3568D4:39913F:66F13167
+    body:
+      encoding: UTF-8
+      string: '{"id":55045987,"client_id":"client_id","account":{"login":"simplybusiness","id":465825,"node_id":"MDEyOk9yZ2FuaXphdGlvbjQ2NTgyNQ==","avatar_url":"https://avatars.githubusercontent.com/u/465825?v=4","gravatar_id":"","url":"https://api.github.com/users/simplybusiness","html_url":"https://github.com/simplybusiness","followers_url":"https://api.github.com/users/simplybusiness/followers","following_url":"https://api.github.com/users/simplybusiness/following{/other_user}","gists_url":"https://api.github.com/users/simplybusiness/gists{/gist_id}","starred_url":"https://api.github.com/users/simplybusiness/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/simplybusiness/subscriptions","organizations_url":"https://api.github.com/users/simplybusiness/orgs","repos_url":"https://api.github.com/users/simplybusiness/repos","events_url":"https://api.github.com/users/simplybusiness/events{/privacy}","received_events_url":"https://api.github.com/users/simplybusiness/received_events","type":"Organization","site_admin":false},"repository_selection":"selected","access_tokens_url":"https://api.github.com/app/installations/55045987/access_tokens","repositories_url":"https://api.github.com/installation/repositories","html_url":"https://github.com/organizations/simplybusiness/settings/installations/55045987","app_id":1001230,"app_slug":"deploy-status-development","target_id":465825,"target_type":"Organization","permissions":{"checks":"read","issues":"read","metadata":"read","statuses":"write","pull_requests":"read"},"events":[],"created_at":"2024-09-19T14:36:41.000Z","updated_at":"2024-09-20T08:48:32.000Z","single_file_name":null,"has_multiple_single_files":false,"single_file_paths":[],"suspended_by":null,"suspended_at":null}'
+  recorded_at: Mon, 23 Sep 2024 09:14:15 GMT
+- request:
+    method: post
+    uri: https://api.github.com/app/installations/55045987/access_tokens
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 9.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer fake_token
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Mon, 23 Sep 2024 09:14:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '230'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept,Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - '"4f45afd9b53cce3af04ecef20f5daf1c9b90327d85f5fc0e55bc9b1277d65310"'
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Server:
+      - github.com
+      X-Github-Request-Id:
+      - 2F1C:2CC281:358C61:39B5D2:66F13167
+    body:
+      encoding: UTF-8
+      string: '{"token":"fake_token","expires_at":"2024-09-23T10:14:15Z","permissions":{"checks":"read","issues":"read","metadata":"read","pull_requests":"read","statuses":"write"},"repository_selection":"selected"}'
+  recorded_at: Mon, 23 Sep 2024 09:14:15 GMT
+- request:
+    method: get
     uri: https://api.github.com/repos/simplybusiness/important-app/issues?direction=desc&labels=block%20deploys&state=open
     body:
       encoding: US-ASCII
@@ -10,7 +140,7 @@ http_interactions:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 4.14.0
+      - Octokit Ruby Gem 9.1.0
       Content-Type:
       - application/json
       Authorization:
@@ -23,38 +153,38 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 25 Oct 2019 18:06:38 GMT
+      - Mon, 23 Sep 2024 09:14:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
       - '2'
-      Server:
-      - GitHub.com
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4993'
-      X-Ratelimit-Reset:
-      - '1572028006'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
+      - Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - '"a77109088aed815ea0e0d506aa4387a9"'
-      X-Oauth-Scopes:
-      - repo
-      X-Accepted-Oauth-Scopes:
-      - repo
+      - '"585824329e513fbc16d7f9176f0896e2de8c65ea2bf46c72d4fe04de145f0b13"'
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - issues=read
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '15000'
+      X-Ratelimit-Remaining:
+      - '14995'
+      X-Ratelimit-Reset:
+      - '1727085957'
+      X-Ratelimit-Used:
+      - '5'
+      X-Ratelimit-Resource:
+      - core
       Access-Control-Expose-Headers:
       - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
       Access-Control-Allow-Origin:
       - "*"
       Strict-Transport-Security:
@@ -64,29 +194,30 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
-      - 1; mode=block
+      - '0'
       Referrer-Policy:
       - origin-when-cross-origin, strict-origin-when-cross-origin
       Content-Security-Policy:
       - default-src 'none'
+      Server:
+      - github.com
       X-Github-Request-Id:
-      - 4E2E:4DCF:2D863D:5163D8:5DB339AE
+      - 329E:6773F:48FFB1:4D52DB:66F13167
     body:
       encoding: UTF-8
       string: "[]"
-    http_version:
-  recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
+  recorded_at: Mon, 23 Sep 2024 09:14:16 GMT
 - request:
     method: post
-    uri: https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
+    uri: https://api.github.com/repos/simplybusiness/important-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281
     body:
       encoding: UTF-8
-      string: '{"description":"The Deploy is free","context":"Deploy Status","state":"success"}'
+      string: '{"description":"You are free to deploy","context":"Deploy status","target_url":null,"state":"success"}'
     headers:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Octokit Ruby Gem 4.14.0
+      - Octokit Ruby Gem 9.1.0
       Content-Type:
       - application/json
       Authorization:
@@ -99,40 +230,40 @@ http_interactions:
       message: Created
     headers:
       Date:
-      - Fri, 25 Oct 2019 18:06:39 GMT
+      - Mon, 23 Sep 2024 09:14:16 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '1332'
-      Server:
-      - GitHub.com
-      Status:
-      - 201 Created
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4992'
-      X-Ratelimit-Reset:
-      - '1572028006'
+      - '1626'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
+      - Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - '"63e64229684e53ae835817ae41360279"'
-      X-Oauth-Scopes:
-      - repo
-      X-Accepted-Oauth-Scopes:
-      - ''
+      - '"2ee112272b6c9bcc66fa1825cbc7c1d6d7e4254039437227395f75ff0c0ef5c9"'
       Location:
-      - https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9
+      - https://api.github.com/repos/simplybusiness/important-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Accepted-Github-Permissions:
+      - statuses=write
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '15000'
+      X-Ratelimit-Remaining:
+      - '14994'
+      X-Ratelimit-Reset:
+      - '1727085957'
+      X-Ratelimit-Used:
+      - '6'
+      X-Ratelimit-Resource:
+      - core
       Access-Control-Expose-Headers:
       - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
       Access-Control-Allow-Origin:
       - "*"
       Strict-Transport-Security:
@@ -142,95 +273,18 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
-      - 1; mode=block
+      - '0'
       Referrer-Policy:
       - origin-when-cross-origin, strict-origin-when-cross-origin
       Content-Security-Policy:
       - default-src 'none'
-      X-Github-Request-Id:
-      - 4E2F:62AE:2C5079:4E9A8A:5DB339AE
-    body:
-      encoding: UTF-8
-      string: '{"url":"https://api.github.com/repos/simplybusiness/important-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","id":7972877558,"node_id":"MDEzOlN0YXR1c0NvbnRleHQ3OTcyODc3NTU4","state":"success","description":"The
-        Deploy is free","target_url":null,"context":"Deploy Status","created_at":"2019-10-25T18:06:38Z","updated_at":"2019-10-25T18:06:38Z","creator":{"login":"sb-silversmiths-bot","id":44407969,"node_id":"MDQ6VXNlcjQ0NDA3OTY5","avatar_url":"https://avatars1.githubusercontent.com/u/44407969?v=4","gravatar_id":"","url":"https://api.github.com/users/sb-silversmiths-bot","html_url":"https://github.com/sb-silversmiths-bot","followers_url":"https://api.github.com/users/sb-silversmiths-bot/followers","following_url":"https://api.github.com/users/sb-silversmiths-bot/following{/other_user}","gists_url":"https://api.github.com/users/sb-silversmiths-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/sb-silversmiths-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/sb-silversmiths-bot/subscriptions","organizations_url":"https://api.github.com/users/sb-silversmiths-bot/orgs","repos_url":"https://api.github.com/users/sb-silversmiths-bot/repos","events_url":"https://api.github.com/users/sb-silversmiths-bot/events{/privacy}","received_events_url":"https://api.github.com/users/sb-silversmiths-bot/received_events","type":"User","site_admin":false}}'
-    http_version:
-  recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repos/simplybusiness/important-app/pulls/13030
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-        - application/vnd.github.v3+json
-      User-Agent:
-        - Octokit Ruby Gem 4.14.0
-      Content-Type:
-        - application/json
-      Authorization:
-        - token fake_token
-      Accept-Encoding:
-        - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-        - Fri, 25 Oct 2019 19:13:19 GMT
-      Content-Type:
-        - application/json; charset=utf-8
-      Transfer-Encoding:
-        - chunked
       Server:
-        - GitHub.com
-      Status:
-        - 200 OK
-      X-Ratelimit-Limit:
-        - '5000'
-      X-Ratelimit-Remaining:
-        - '4993'
-      X-Ratelimit-Reset:
-        - '1572031494'
-      Cache-Control:
-        - private, max-age=60, s-maxage=60
-      Vary:
-        - Accept, Authorization, Cookie, X-GitHub-OTP
-        - Accept-Encoding
-      Etag:
-        - W/"6eef63d0ee671f1e2d0c2c4c28f86c3a"
-      Last-Modified:
-        - Fri, 25 Oct 2019 17:52:25 GMT
-      X-Oauth-Scopes:
-        - repo
-      X-Accepted-Oauth-Scopes:
-        - ''
-      X-Github-Media-Type:
-        - github.v3; format=json
-      Access-Control-Expose-Headers:
-        - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-          X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-          X-GitHub-Media-Type
-      Access-Control-Allow-Origin:
-        - "*"
-      Strict-Transport-Security:
-        - max-age=31536000; includeSubdomains; preload
-      X-Frame-Options:
-        - deny
-      X-Content-Type-Options:
-        - nosniff
-      X-Xss-Protection:
-        - 1; mode=block
-      Referrer-Policy:
-        - origin-when-cross-origin, strict-origin-when-cross-origin
-      Content-Security-Policy:
-        - default-src 'none'
+      - github.com
       X-Github-Request-Id:
-        - B1BE:15C6:1E99AB:382E11:5DB3494E
+      - 35C0:2CBB47:3553D0:397D55:66F13168
     body:
       encoding: UTF-8
-      string: '{"labels":[{"id":1638720027,"node_id":"MDU6TGFiZWwxNjM4NzIwMDI3","url":"https://api.github.com/repos/simplybusiness/important-app/labels/emergency deploy","name":"emergency deploy","color":"065bcc","default":false}]}'
-    http_version:
-  recorded_at: Fri, 25 Oct 2019 11:00:00 GMT
-recorded_with: VCR 3.0.3
+      string: '{"url":"https://api.github.com/repos/simplybusiness/important-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281","avatar_url":"https://avatars.githubusercontent.com/u/465825?v=4","id":31535775266,"node_id":"SC_kwDODDsmz88AAAAHV62-Ig","state":"success","description":"You
+        are free to deploy","target_url":null,"context":"Deploy status","created_at":"2024-09-23T09:14:16Z","updated_at":"2024-09-23T09:14:16Z","creator":{"login":"deploy-status-development[bot]","id":181950833,"node_id":"BOT_kgDOCthZcQ","avatar_url":"https://avatars.githubusercontent.com/u/465825?v=4","gravatar_id":"","url":"https://api.github.com/users/deploy-status-development%5Bbot%5D","html_url":"https://github.com/apps/deploy-status-development","followers_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/followers","following_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/following{/other_user}","gists_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/gists{/gist_id}","starred_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/subscriptions","organizations_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/orgs","repos_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/repos","events_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/events{/privacy}","received_events_url":"https://api.github.com/users/deploy-status-development%5Bbot%5D/received_events","type":"Bot","site_admin":false}}'
+  recorded_at: Mon, 23 Sep 2024 09:14:16 GMT
+recorded_with: VCR 6.3.1
