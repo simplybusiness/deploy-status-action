@@ -14,13 +14,13 @@ RSpec.describe PrDeployCheck do
       ENV['CLIENT_ID'] = 'client_id'
       ENV['PRIVATE_KEY'] = JWT::JWK.new(OpenSSL::PKey::RSA.new(2048)).keypair.to_pem
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
-      ENV['GITHUB_REF'] = 'ref/my/base/branch'
+      ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
     end
 
     it 'returns a success for the deploy check' do
-      config =  GithubApiConfig.new
       VCR.use_cassette('emergency deploy update success') do
+        config = GithubApiConfig.new
         response = PrDeployCheck.check_labeled_pr(config)
         expect(response['state']).to eq('success')
       end
