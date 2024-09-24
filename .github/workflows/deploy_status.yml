@@ -25,5 +25,6 @@ jobs:
       - name: Deploy Status Action
         uses: ./
         env:
-          ISSUE_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CLIENT_ID: ${{ secrets.DEPLOY_STATUS_CLIENT_ID }}
+          PRIVATE_KEY: ${{ secrets.DEPLOY_STATUS_PRIVATE_KEY }}
           AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
