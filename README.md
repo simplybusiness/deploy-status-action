@@ -38,7 +38,7 @@ specific PR.
            with:
              bundler-cache: true # runs 'bundle install' and caches installed gems automatically                       
          - name: Deploy Status Action
-           uses: simplybusiness/deploy-status-action@v0.4.1
+           uses: simplybusiness/deploy-status-action@v2
            env:
              CLIENT_ID: ${{ secrets.CLIENT_ID }}
              PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
