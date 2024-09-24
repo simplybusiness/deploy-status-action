@@ -1,3 +1,5 @@
+Test
+
 # Deploy status action
 
 GitHub Action that blocks all deploys based upon an issue being raised with the "block deploys" label. If someone would
