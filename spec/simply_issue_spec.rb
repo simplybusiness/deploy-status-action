@@ -10,7 +10,8 @@ require_relative '../lib/functionality/base_deploy_check'
 RSpec.describe 'SimplyIssue' do
   before do
     ENV['GITHUB_REPOSITORY'] = 'simplybusiness/important-app'
-    ENV['ISSUE_TOKEN'] = 'fake_token'
+    ENV['CLIENT_ID'] = 'client_id'
+    ENV['PRIVATE_KEY'] = JWT::JWK.new(OpenSSL::PKey::RSA.new(2048)).keypair.to_pem
   end
 
   let(:config) { GithubApiConfig.new }
@@ -18,10 +19,10 @@ RSpec.describe 'SimplyIssue' do
   context 'when PR is labeled with emergency deploy tag' do
     it 'returns the emergency deploy tag' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
-      ENV['GITHUB_REF'] = 'ref/my/base/branch'
+      ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
-      config = GithubApiConfig.new
       VCR.use_cassette('emergency deploy update success') do
+        config = GithubApiConfig.new
         response = SimplyIssue.get_label_tags(config)
         expect(response).to include('emergency deploy')
       end
@@ -31,10 +32,10 @@ RSpec.describe 'SimplyIssue' do
   context 'when I ask for all open PRs' do
     it 'returns at least one open PR' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
-      ENV['GITHUB_REF'] = 'ref/my/base/branch'
+      ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
-      config = GithubApiConfig.new
       VCR.use_cassette('all prs') do
+        config = GithubApiConfig.new
         response = SimplyIssue.get_all_issues(config, 'pull_request')
         expect(response.length).to be_positive
       end
@@ -44,11 +45,11 @@ RSpec.describe 'SimplyIssue' do
   context 'when I ask for all issues with blocked_deploy tag when one exists' do
     it 'returns at least one open PR' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
-      ENV['GITHUB_REF'] = 'ref/my/base/branch'
-      ENV['GITHUB_EVENT_NAME'] = 'pull_request'
-      config = GithubApiConfig.new
+      ENV['GITHUB_REF'] = 'ref/heads/test-branch'
+      ENV['GITHUB_EVENT_NAME'] = 'issues'
       VCR.use_cassette('all issues with blocked_deploy tag') do
-        response = SimplyIssue.get_all_issues(config, 'issues', 'blocked_deploy')
+        config = GithubApiConfig.new
+        response = SimplyIssue.get_all_issues(config, 'issues', 'block deploys')
         expect(response.length).to be_positive
       end
     end

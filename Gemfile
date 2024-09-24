@@ -14,3 +14,5 @@ group :development, :test do
 end
 
 gem "faraday-retry", "~> 2.2"
+
+gem "jwt", "~> 2.9"
