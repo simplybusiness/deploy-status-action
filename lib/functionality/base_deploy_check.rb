@@ -24,7 +24,7 @@ class BaseDeployCheck
                  context: context_name,
                  target_url: config.event_payload['html_url']
                )
-               github_summary_message += "You are free to deploy "
+               github_summary_message += ":tada: You are free to deploy :tada:  "
              end
     github_summary_message += "Created #{result[:state]} state with description #{result[:description]}"
     github_summary_message += "for sha #{sha} and url #{result[:url]}\ "
