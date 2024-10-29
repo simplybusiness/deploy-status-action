@@ -12,14 +12,14 @@ class IssueDeployCheck < BaseDeployCheck
 
     puts "Event: #{config.event_payload['action']} called"
     puts '==============================================='
-
+    github_summary_message = "## Deploy Status Check\n"
     case config.event_payload['action']
     when 'labeled'
-      github_summary_message += "## :boom: Deploys are blocked :boom:\ "
+      github_summary_message += "### :boom: Deploys are blocked :boom:\n"
       create_status_for_all_prs(config, 'failure', github_summary_message)
     when 'closed'
       if SimplyIssue.get_all_issues(config, 'issues', 'block deploys').empty?
-        github_summary_message += "## :sparkles: You are free to deploy :sparkles:\ "
+        github_summary_message += "### :sparkles: You are free to deploy :sparkles:\n"
         create_status_for_all_prs(config, 'success', github_summary_message)
       end
     end
@@ -35,10 +35,10 @@ class IssueDeployCheck < BaseDeployCheck
         context: context_name,
         target_url: config.event_payload['html_url']
       )
-      message += " Created #{result[:state]} state with\ "
-      message += " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}\ "
-      message += " with target_url #{config.event_payload['html_url']}\ "
-      message += ' ============================================================================================ \ '
+      message += "Created #{result[:state]} state with\n"
+      message += "description #{result[:description]} for PR #{pr.number} and url #{result[:url]}\n"
+      message += "with target_url #{config.event_payload['html_url']}\n"
+      message += '============================================================================================ \ '
       create_github_summary(message)
       puts "Created #{result[:state]} state with " \
            "description #{result[:description]} for PR #{pr.number} and url #{result[:url]} " \

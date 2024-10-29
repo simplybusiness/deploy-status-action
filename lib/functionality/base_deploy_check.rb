@@ -8,10 +8,10 @@ require_relative 'simply_issue'
 class BaseDeployCheck
   def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
-    github_summary_message = ""
+    github_summary_message = "## Deploy Status Check\n "
     result = nil
     if SimplyIssue.block_deploys?(config, event)
-      github_summary_message += ":boom: Deploys are blocked :boom: "
+      github_summary_message += "### :boom: Deploys are blocked :boom:\n"
       result = config.client.create_status(
         config.app_repo, sha, 'failure',
         description: 'Deploys are blocked',
@@ -19,7 +19,7 @@ class BaseDeployCheck
         target_url: config.event_payload['html_url']
       )
     else
-      github_summary_message += ":tada: You are free to deploy :tada:  "
+      github_summary_message += "### :tada: You are free to deploy :tada:\n"
       result = config.client.create_status(
         config.app_repo, sha, 'success',
         description: 'You are free to deploy',
@@ -27,9 +27,8 @@ class BaseDeployCheck
         target_url: config.event_payload['html_url']
       )
     end
-    github_summary_message += "Created #{result[:state]} state with description #{result[:description]}"
-    github_summary_message += "for sha #{sha} and url #{result[:url]}\ "
-    github_summary_message += "with target_url #{config.event_payload['html_url']}\ "
+    github_summary_message += "Created #{result[:state]} state with description: #{result[:description]}"
+    github_summary_message += "for sha #{sha} and url #{result[:url]}\n"
     github_summary_message += '========================================================================='
     create_github_summary(github_summary_message)
     puts "Created #{result[:state]} state with description #{result[:description]}"
