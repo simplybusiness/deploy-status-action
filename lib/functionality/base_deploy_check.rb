@@ -39,7 +39,7 @@ class BaseDeployCheck
   end
 
   def self.create_github_summary(github_summary_message)
-    File.open(ENV.fetch('GITHUB_STEP_SUMMARY', nil), 'w') do |file|
+    File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'w') do |file|
       file.puts github_summary_message
     end
   end

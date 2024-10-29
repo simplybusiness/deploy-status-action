@@ -20,6 +20,7 @@ RSpec.describe 'BaseDeployCheck' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('open_pr_payload.json').to_s
       ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
+      ENV['GITHUB_STEP_SUMMARY'] = '/tmp/summary.tmp'
       sha = '03743b2ec1b201cec2de04ebebbac6e74afab281'
 
       VCR.use_cassette('no blocked deploy update success') do
@@ -34,6 +35,7 @@ RSpec.describe 'BaseDeployCheck' do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('open_pr_payload.json').to_s
       ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
+      ENV['GITHUB_STEP_SUMMARY'] = '/tmp/summary.tmp'
       sha = '03743b2ec1b201cec2de04ebebbac6e74afab281'
 
       VCR.use_cassette('blocked deploy update failure') do
