@@ -16,6 +16,7 @@ RSpec.describe PrDeployCheck do
       ENV['GITHUB_EVENT_PATH'] = Pathname.new(SPEC_FIXTURES_PATH).join('labeled_pr_payload.json').to_s
       ENV['GITHUB_REF'] = 'ref/heads/test-branch'
       ENV['GITHUB_EVENT_NAME'] = 'pull_request'
+      ENV['GITHUB_STEP_SUMMARY'] = '/tmp/summary.tmp'
     end
 
     it 'returns a success for the deploy check' do
