@@ -35,10 +35,10 @@ class IssueDeployCheck < BaseDeployCheck
         context: context_name,
         target_url: config.event_payload['html_url']
       )
-      message += " Created #{result[:state]} state with\n"
-      message += " description #{result[:description]} for PR #{pr.number} and url #{result[:url]}\n"
-      message += " with target_url #{config.event_payload['html_url']}\n"
-      message += ' ============================================================================================ \ '
+      message += "Created #{result[:state]} state with\n"
+      message += "description #{result[:description]} for PR #{pr.number} and url #{result[:url]}\n"
+      message += "with target_url #{config.event_payload['html_url']}\n"
+      message += '============================================================================================ \ '
       create_github_summary(message)
       puts "Created #{result[:state]} state with " \
            "description #{result[:description]} for PR #{pr.number} and url #{result[:url]} " \

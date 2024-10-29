@@ -27,9 +27,8 @@ class BaseDeployCheck
         target_url: config.event_payload['html_url']
       )
     end
-    github_summary_message += "Created #{result[:state]} state with description #{result[:description]}"
+    github_summary_message += "Created #{result[:state]} state with description: #{result[:description]}"
     github_summary_message += "for sha #{sha} and url #{result[:url]}\n"
-    github_summary_message += "with target_url #{config.event_payload['html_url']}\n"
     github_summary_message += '========================================================================='
     create_github_summary(github_summary_message)
     puts "Created #{result[:state]} state with description #{result[:description]}"

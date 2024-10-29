@@ -18,7 +18,8 @@ class PrDeployCheck < BaseDeployCheck
       context: context_name,
       target_url: config.event_payload['html_url']
     )
-    github_summary_message = "## :sparkles: You are free to deploy :sparkles:\n" 
+    github_summary_message = "Deploy Status Check\n"
+    github_summary_message += "### :sparkles: You are free to deploy :sparkles:\n" 
     github_summary_message += " Created #{result[:state]} state with description #{result[:description]} for sha #{sha} and url #{result[:url]}\n"
     github_summary_message += " description #{result[:description]} for sha #{sha} for url #{result[:url]}\n"
     github_summary_message += " with target_url #{config.event_payload['html_url']}\n "
