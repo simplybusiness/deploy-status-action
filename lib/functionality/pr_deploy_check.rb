@@ -23,7 +23,6 @@ class PrDeployCheck < BaseDeployCheck
     github_summary_message += "- Created #{result[:state]} state with description #{result[:description]} for sha #{sha} and url #{result[:url]}\n"
     github_summary_message += "- description #{result[:description]} for sha #{sha} for url #{result[:url]}\n"
     github_summary_message += "- with target_url #{config.event_payload['html_url']}\n "
-    github_summary_message += '============================================================================================'
     create_github_summary(github_summary_message)
     
     puts "Created #{result[:state]} state with" \
