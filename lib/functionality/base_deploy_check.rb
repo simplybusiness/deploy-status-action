@@ -9,23 +9,24 @@ class BaseDeployCheck
   def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
     github_summary_message = ""
-    result = if SimplyIssue.block_deploys?(config, event)
-               config.client.create_status(
-                 config.app_repo, sha, 'failure',
-                 description: 'Deploys are blocked',
-                 context: context_name,
-                 target_url: config.event_payload['html_url']
-               )
-               github_summary_message += ":boom: Deploys are blocked :boom: "
-             else
-               config.client.create_status(
-                 config.app_repo, sha, 'success',
-                 description: 'You are free to deploy',
-                 context: context_name,
-                 target_url: config.event_payload['html_url']
-               )
-               github_summary_message += ":tada: You are free to deploy :tada:  "
-             end
+    result = nil
+    if SimplyIssue.block_deploys?(config, event)
+      github_summary_message += ":boom: Deploys are blocked :boom: "
+      result = config.client.create_status(
+        config.app_repo, sha, 'failure',
+        description: 'Deploys are blocked',
+        context: context_name,
+        target_url: config.event_payload['html_url']
+      )
+    else
+      github_summary_message += ":tada: You are free to deploy :tada:  "
+      result = config.client.create_status(
+        config.app_repo, sha, 'success',
+        description: 'You are free to deploy',
+        context: context_name,
+        target_url: config.event_payload['html_url']
+      )
+    end
     github_summary_message += "Created #{result[:state]} state with description #{result[:description]}"
     github_summary_message += "for sha #{sha} and url #{result[:url]}\ "
     github_summary_message += "with target_url #{config.event_payload['html_url']}\ "
