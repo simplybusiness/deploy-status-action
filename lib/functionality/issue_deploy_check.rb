@@ -16,22 +16,22 @@ class IssueDeployCheck < BaseDeployCheck
     case config.event_payload['action']
     when 'labeled'
       github_summary_message += "### :boom: Deploys are blocked :boom:\n"
-      create_status_for_all_prs(config, 'failure', github_summary_message)
+      create_status_for_all_prs(config, 'failure', 'Deploys are blocked', github_summary_message)
     when 'closed'
       if SimplyIssue.get_all_issues(config, 'issues', 'block deploys').empty?
         github_summary_message += "### :sparkles: You are free to deploy :sparkles:\n"
-        create_status_for_all_prs(config, 'success', github_summary_message)
+        create_status_for_all_prs(config, 'success', 'You are free to deploy', github_summary_message)
       end
     end
   end
 
-  def self.create_status_for_all_prs(config, status, message)
+  def self.create_status_for_all_prs(config, status, status_message, message)
     config.client.auto_paginate = true
     all_pull_requests = SimplyIssue.get_all_issues(config, 'pull_request')
     all_pull_requests.each do |pr|
       result = config.client.create_status(
         config.app_repo, pr['head']['sha'], status,
-        description: message,
+        description: status_message,
         context: context_name,
         target_url: config.event_payload['html_url']
       )
