@@ -16,11 +16,11 @@ class IssueDeployCheck < BaseDeployCheck
     case config.event_payload['action']
     when 'labeled'
       github_summary_message += "### :boom: Deploys are blocked :boom:\n"
-      create_status_for_all_prs(config, 'failure', github_summary_message)
+      create_status_for_all_prs(config, 'failure', 'Deploys are blocked')
     when 'closed'
       if SimplyIssue.get_all_issues(config, 'issues', 'block deploys').empty?
         github_summary_message += "### :sparkles: You are free to deploy :sparkles:\n"
-        create_status_for_all_prs(config, 'success', github_summary_message)
+        create_status_for_all_prs(config, 'success', 'You are free to deploy')
       end
     end
   end
