@@ -7,7 +7,7 @@ inherit_gem:
     - .simplycop_rspec.yml
 
 AllCops:
-  TargetRubyVersion: 3.1.2
+  TargetRubyVersion: 3.2
 Metrics/BlockLength:
   Max: 250
 Metrics/AbcSize:
