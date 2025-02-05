@@ -13,7 +13,7 @@ begin
   config = GithubApiConfig.new
   case config.event_name
   when 'pull_request', 'pull_request_target'
-    if config.event_payload['action'] == 'opened' || config.event_payload['action'] == 'synchronize'
+    if ['opened', 'synchronize'].include?(config.event_payload['action'])
       puts 'Pull request is opened or synchronized'
       puts '============================================='
       PrDeployCheck.base_check(config, 'issues', config.event_payload['pull_request']['head']['sha'])
