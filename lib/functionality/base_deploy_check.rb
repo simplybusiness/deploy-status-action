@@ -8,40 +8,35 @@ require_relative 'simply_issue'
 class BaseDeployCheck
   def self.base_check(config, event, sha)
     puts "config event branch  #{config.event_branch}"
-    github_summary_message = "## Deploy Status Check\n "
-    result = nil
-    if SimplyIssue.block_deploys?(config, event)
-      github_summary_message += "### :boom: Deploys are blocked :boom:\n"
-      result = create_failure_status(config, sha)
-    else
-      github_summary_message += "### :tada: You are free to deploy :tada:\n"
-      result = create_success_status(config, sha)
-    end
-    github_summary_message += "- Created #{result[:state]} state with description: #{result[:description]}\n"
-    github_summary_message += "- for sha #{sha} and url #{result[:url]}\n"
-    create_github_summary(github_summary_message)
+
+    state = SimplyIssue.block_deploys?(config, event) ? 'failure' : 'success'
+    description = state == 'failure' ? 'Deploys are blocked' : 'You are free to deploy'
+    icon = state == 'failure' ? ':boom:' : ':tada:'
+    result = create_status(config, sha, state, description)
+
+    create_github_summary(build_message(icon, description, result, sha))
     puts "Created #{result[:state]} state with description #{result[:description]}"
     print "for sha #{sha} and url #{result[:url]}"
     puts '========================================================================='
     result
   end
 
-  def self.create_failure_status(config, sha)
+  def self.create_status(config, sha, state, description)
     config.client.create_status(
-      config.app_repo, sha, 'failure',
-      description: 'Deploys are blocked',
+      config.app_repo, sha, state,
+      description: description,
       context: context_name,
       target_url: config.event_payload['html_url']
     )
   end
 
-  def self.create_success_status(config, sha)
-    config.client.create_status(
-      config.app_repo, sha, 'success',
-      description: 'You are free to deploy',
-      context: context_name,
-      target_url: config.event_payload['html_url']
-    )
+  def self.build_message(icon, description, result, sha)
+    <<~MESSAGE
+      ## Deploy Status Check
+      ### #{icon} #{description} #{icon}:
+      - Created #{result[:state]} state with description: #{result[:description]}
+      - for sha #{sha} and url #{result[:url]}
+    MESSAGE
   end
 
   def self.create_github_summary(github_summary_message)
