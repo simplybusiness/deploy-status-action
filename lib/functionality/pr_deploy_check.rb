@@ -12,25 +12,13 @@ class PrDeployCheck < BaseDeployCheck
     return unless label_tags.include?('emergency deploy')
 
     sha = config.event_payload['pull_request']['head']['sha']
-    result = config.client.create_status(
-      config.app_repo, sha, 'success',
-      description: 'You are free to deploy',
-      context: context_name,
-      target_url: config.event_payload['html_url']
-    )
-    message = <<~MESSAGE
-      ## Deploy Status Check!
-      ### :sparkles: You are free to deploy :sparkles:
-      - Created #{result[:state]} state with description #{result[:description]} for sha #{sha} and url #{result[:url]}
-      - Description: #{result[:description]} for sha #{sha} for url #{result[:url]}
-      - With target_url: #{config.event_payload['html_url']}
-    MESSAGE
-    create_github_summary(message)
+    description = "You are free to deploy"
+    icon = ":sparkles:"
+    result = create_status(config, sha, "success", description)
+    message = build_message(icon, description, result, sha, config.event_payload['html_url'])
 
-    puts "Created #{result[:state]} state with" \
-         "description #{result[:description]} for sha #{sha} for url #{result[:url]} " \
-         "with target_url #{config.event_payload['html_url']}"
-    puts '============================================================================================'
+    create_github_summary(message)
+    create_log_summary(result, sha, config.event_payload['html_url'])
     result
   end
 end

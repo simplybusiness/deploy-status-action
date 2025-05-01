@@ -15,9 +15,8 @@ class BaseDeployCheck
     result = create_status(config, sha, state, description)
 
     create_github_summary(build_message(icon, description, result, sha))
-    puts "Created #{result[:state]} state with description #{result[:description]}"
-    print "for sha #{sha} and url #{result[:url]}"
-    puts '========================================================================='
+    create_log_summary(result, sha)
+
     result
   end
 
@@ -30,19 +29,32 @@ class BaseDeployCheck
     )
   end
 
-  def self.build_message(icon, description, result, sha)
-    <<~MESSAGE
+  def self.build_message(icon, description, result, sha, target_url = nil)
+    message = <<~MESSAGE
       ## Deploy Status Check
       ### #{icon} #{description} #{icon}:
       - Created #{result[:state]} state with description: #{result[:description]}
       - for sha #{sha} and url #{result[:url]}
     MESSAGE
+
+    message += "- With target_url: #{target_url}" if target_url
+    message
   end
 
   def self.create_github_summary(github_summary_message)
     File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'w') do |file|
       file.puts github_summary_message
     end
+  end
+
+  def self.create_log_summary(result, sha, target_url = nil)
+    state = result[:state]
+    description = result[:description]
+    url = result[:url]
+
+    puts "Created #{state} state with description #{description} for sha #{sha} and url #{url}"
+    puts "with target_url #{target_url}" if target_url
+    puts "========================================================================="
   end
 
   def self.context_name
