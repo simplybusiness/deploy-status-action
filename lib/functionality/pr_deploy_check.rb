@@ -18,7 +18,7 @@ class PrDeployCheck < BaseDeployCheck
     message = build_message(icon, description, result, sha, config.event_payload['html_url'])
 
     create_github_summary(message)
-    create_log_summary(result, sha, config.event_payload['html_url'])
+    create_log_summary(result, sha: sha, target_url: config.event_payload['html_url'])
     result
   end
 end

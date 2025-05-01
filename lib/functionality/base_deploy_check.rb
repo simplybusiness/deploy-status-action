@@ -15,7 +15,7 @@ class BaseDeployCheck
     result = create_status(config, sha, state, description)
 
     create_github_summary(build_message(icon, description, result, sha))
-    create_log_summary(result, sha)
+    create_log_summary(result, sha: sha)
 
     result
   end
@@ -47,14 +47,19 @@ class BaseDeployCheck
     end
   end
 
-  def self.create_log_summary(result, sha, target_url = nil)
+  def self.create_log_summary(result, pr_number: nil, sha: nil, target_url: nil)
     state = result[:state]
     description = result[:description]
     url = result[:url]
 
-    puts "Created #{state} state with description #{description} for sha #{sha} and url #{url}"
-    puts "with target_url #{target_url}" if target_url
-    puts "========================================================================="
+    pr_or_sha_statement = pr_number ? "for PR #{pr_number}" : "for sha #{sha}"
+    target_url_statement = target_url ? " with target_url #{target_url}" : ""
+
+    puts <<~LOG
+        Created #{state} state with description #{description} #{pr_or_sha_statement}
+        and url #{url} #{target_url_statement}
+      =========================================================================
+    LOG
   end
 
   def self.context_name
