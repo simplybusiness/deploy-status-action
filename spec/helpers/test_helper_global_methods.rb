@@ -10,8 +10,6 @@ def configure_vcr
   end
 end
 
-private
-
 def vcr_config(config)
   config.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   config.hook_into :webmock
