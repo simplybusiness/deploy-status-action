@@ -5,7 +5,7 @@ metadata:
   title: Deploy Status Action
   description: GitHub Action to provide status and ability to block releases by creating an issue
 spec:
-  type: github action
+  type: tooling
   lifecycle: production
   dependsOn:
     - "Resource:github-actions"
