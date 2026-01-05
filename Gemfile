@@ -13,6 +13,6 @@ group :development, :test do
   gem 'webmock'
 end
 
-gem "faraday-retry", "~> 2.3"
+gem "faraday-retry", "~> 2.4"
 
 gem "jwt", "~> 3.1"
