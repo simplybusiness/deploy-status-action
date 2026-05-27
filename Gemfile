@@ -15,4 +15,4 @@ end
 
 gem "faraday-retry", "~> 2.4"
 
-gem "jwt", "~> 3.1"
+gem "jwt", "~> 3.2"
