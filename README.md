@@ -44,6 +44,7 @@ specific PR.
              PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
              AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
     ```
+
    **NOTE:** We recommend you use `pull_request_target` event as mentioned in example as it will work when you create
    PRs from a forked repository with provided permission. You can also use `pull_request` event but that will work only
    for the PR in same repository.
@@ -55,7 +56,7 @@ specific PR.
 
    ![Required status](images/require_status.png)
 
-5. To block the deploy now open an issue with label `block deploys`. It will block all the deploys and show th status on
+4. To block the deploy now open an issue with label `block deploys`. It will block all the deploys and show th status on
    PRs.
 
    ![Deploy status](images/deploy_status.png)
