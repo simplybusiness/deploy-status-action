@@ -56,7 +56,7 @@ specific PR.
 
    ![Required status](images/require_status.png)
 
-4. To block the deploy now open an issue with label `block deploys`. It will block all the deploys and show th status on
+4. To block the deploy now open an issue with label `block deploys`. It will block all the deploys and show the status on
    PRs.
 
    ![Deploy status](images/deploy_status.png)
