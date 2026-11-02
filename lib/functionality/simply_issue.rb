@@ -24,7 +24,11 @@ class SimplyIssue
       # Search, because the list issues API also returns pull requests
       query = "repo:#{config.app_repo} is:issue is:open"
       query += " label:\"#{label}\"" if label
-      config.client.search_issues(query).items
+      result = config.client.search_issues(query)
+      # An incomplete result could leave out a blocking issue
+      raise "Search for blocking issues returned incomplete results: #{query}" if result.incomplete_results
+
+      result.items
     end
   end
 
