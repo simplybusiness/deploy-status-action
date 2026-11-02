@@ -54,4 +54,15 @@ RSpec.describe 'SimplyIssue' do
       end
     end
   end
+
+  context 'when the search for blocking issues returns incomplete results' do
+    it 'raises an error instead of returning no issues' do
+      client = instance_double(Octokit::Client)
+      allow(client).to receive(:search_issues).and_return(double(incomplete_results: true, items: []))
+      config = instance_double(GithubApiConfig, client: client, app_repo: 'simplybusiness/important-app')
+
+      expect { SimplyIssue.get_all_issues(config, 'issues', 'block deploys') }
+        .to raise_error(/incomplete results/)
+    end
+  end
 end
