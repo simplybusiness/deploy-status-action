@@ -21,7 +21,10 @@ class SimplyIssue
     when 'pull_request'
       config.client.pull_requests(config.app_repo, state: 'open')
     when 'issues'
-      config.client.list_issues(config.app_repo, state: 'open', direction: 'desc', labels: label)
+      # Search, because the list issues API also returns pull requests
+      query = "repo:#{config.app_repo} is:issue is:open"
+      query += " label:\"#{label}\"" if label
+      config.client.search_issues(query).items
     end
   end
 
