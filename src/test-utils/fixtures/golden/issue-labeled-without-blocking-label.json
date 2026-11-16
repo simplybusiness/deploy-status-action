@@ -1,0 +1,31 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/issues/160",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "",
+  "summary": null,
+  "exitCode": 0
+}

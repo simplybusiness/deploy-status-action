@@ -1,0 +1,15 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "Unexpected error occurred: GET http://github.test/repos/simplybusiness/important-app/installation: 404 - Not Found // See: https://docs.github.com/rest/apps/apps#get-a-repository-installation-for-the-authenticated-app\n",
+  "summary": null,
+  "exitCode": 0
+}

@@ -1,0 +1,50 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/search/issues",
+      "query": [
+        [
+          "q",
+          "repo:simplybusiness/other-app is:issue is:open label:\"block deploys\""
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/repos/simplybusiness/other-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": {
+        "description": "You are free to deploy",
+        "context": "Deploy status",
+        "target_url": null,
+        "state": "success"
+      },
+      "rawBody": "{\"description\":\"You are free to deploy\",\"context\":\"Deploy status\",\"target_url\":null,\"state\":\"success\"}"
+    }
+  ],
+  "stdout": "Pull request is opened or synchronized\n=============================================\nconfig event branch  refs/heads/master\nCreated success state with description You are free to deploy\nfor sha 63f739d5586b2c6b718045893789d620e0d0aee9 and url https://api.github.com/repos/simplybusiness/other-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9=========================================================================\n",
+  "summary": "## Deploy Status Check\n ### :tada: You are free to deploy :tada:\n- Created success state with description: You are free to deploy\n- for sha 63f739d5586b2c6b718045893789d620e0d0aee9 and url https://api.github.com/repos/simplybusiness/other-app/statuses/63f739d5586b2c6b718045893789d620e0d0aee9\n",
+  "exitCode": 0
+}

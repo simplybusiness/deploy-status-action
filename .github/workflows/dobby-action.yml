@@ -1,0 +1,64 @@
+name: Dobby
+on:
+  issue_comment:
+    types: [created]
+permissions: {}
+jobs:
+  pr_commented:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/dobby')
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      BUNDLE_WITHOUT: "development:test"
+    steps:
+      # Anyone can comment on a pull request in a public repository, and Dobby
+      # does not check who is asking, so check it here
+      - name: Check that the commenter can push to this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMENTER: ${{ github.event.comment.user.login }}
+        run: |
+          permission="$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${COMMENTER}/permission" --jq .permission)"
+          if [ "$permission" != "admin" ] && [ "$permission" != "write" ]; then
+            echo "::error::${COMMENTER} does not have write access to this repository"
+            exit 1
+          fi
+      # Dobby commits to the branch with the same name in this repository,
+      # which is the wrong branch when the pull request comes from a fork
+      - name: Check that the pull request does not come from a fork
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          head_repository="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq .head.repo.full_name)"
+          if [ "$head_repository" != "$GITHUB_REPOSITORY" ]; then
+            echo "::error::Pull request ${PR_NUMBER} comes from a fork, so Dobby cannot bump its version"
+            exit 1
+          fi
+      # The two dobby refs must stay the same: the action runs the code that
+      # this step checks out
+      - name: Checkout action
+        uses: actions/checkout@v7
+        with:
+          repository: "simplybusiness/dobby"
+          ref: "v4"
+          persist-credentials: false
+      - name: Set up ruby
+        uses: ruby/setup-ruby@v1
+      # No bundler-cache: a run started by a comment can restore a cache but
+      # never save one, so a restored cache would come from another workflow,
+      # and the next step has the Dobby app's key
+      - name: Install Dobby's gems
+        run: bundle install
+      - name: Bump version
+        uses: simplybusiness/dobby@v4
+        env:
+          DOBBY_APP_ID: ${{ secrets.DOBBY_APP_ID }}
+          DOBBY_PRIVATE_KEY: ${{ secrets.DOBBY_PRIVATE_KEY }}
+          VERSION_FILE_PATH: package.json
+          # Without a pattern Dobby replaces every occurrence of the version in
+          # package.json, including a dependency range such as "^3.0.1"
+          VERSION_FILE_PATTERN: '"version": "1.2.3"'
+          OTHER_VERSION_FILE_PATHS: package-lock.json

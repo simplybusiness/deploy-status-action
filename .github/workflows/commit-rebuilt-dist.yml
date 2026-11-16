@@ -1,0 +1,125 @@
+name: Commit rebuilt dist
+
+on:
+  workflow_run:
+    workflows: ["Rebuild dist"]
+    types: [completed]
+
+permissions: {}
+
+concurrency:
+  group: commit-rebuilt-dist-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  commit:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to read the build run and download its artifacts
+      actions: read
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Download build details
+        uses: actions/download-artifact@v8
+        with:
+          name: build-info
+          path: build-info
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Validate pull request and built SHA
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          info=$(cat build-info/build-info.json)
+          pr_number=$(jq -r .pr_number <<<"$info")
+          head_ref=$(jq -r .head_ref <<<"$info")
+          built_sha=$(jq -r .head_sha <<<"$info")
+          run=$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}")
+          event=$(jq -r .event <<<"$run")
+
+          if [ "$(jq -r .head_repository.full_name <<<"$run")" != "$REPOSITORY" ]; then
+            echo "::error::The build run did not originate from this repository"
+            exit 1
+          fi
+          if [ "$event" = "pull_request" ]; then
+            run_pr=$(jq -r '[.pull_requests[].number] | unique | if length == 1 then .[0] else empty end' <<<"$run")
+            if [ "$run_pr" != "$pr_number" ]; then
+              echo "::error::The build artifact does not match the pull request that triggered the run"
+              exit 1
+            fi
+          elif [ "$event" != "workflow_dispatch" ]; then
+            echo "::error::Unsupported build event: ${event}"
+            exit 1
+          fi
+
+          pr=$(gh api "repos/${REPOSITORY}/pulls/${pr_number}")
+          if [ "$(jq -r .head.repo.full_name <<<"$pr")" != "$REPOSITORY" ] ||
+             [ "$(jq -r .base.repo.full_name <<<"$pr")" != "$REPOSITORY" ]; then
+            echo "::error::The pull request must come from this repository"
+            exit 1
+          fi
+          if [ "$event" = "pull_request" ] &&
+             [ "$(jq -r .user.login <<<"$pr")" != "dependabot[bot]" ]; then
+            echo "::error::Only Dependabot pull requests can be rebuilt automatically"
+            exit 1
+          fi
+          if [ "$(jq -r .head.sha <<<"$pr")" != "$built_sha" ] ||
+             [ "$(jq -r .head.ref <<<"$pr")" != "$head_ref" ]; then
+            echo "::error::The pull request branch moved since dist was built. Run this workflow again."
+            exit 1
+          fi
+
+          echo "head_ref=${head_ref}" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${built_sha}" >> "$GITHUB_OUTPUT"
+      - name: Prepare pull request commit
+        env:
+          BUILT_SHA: ${{ steps.pr.outputs.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git init
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -c http.extraheader="$auth_header" fetch --no-tags --depth=1 origin "$BUILT_SHA"
+          git update-ref refs/heads/rebuilt-dist "$BUILT_SHA"
+          git symbolic-ref HEAD refs/heads/rebuilt-dist
+          git read-tree "$BUILT_SHA"
+          rm -rf build-info
+          git archive "$BUILT_SHA" | tar -x
+      - name: Check the branch has not moved since the build
+        env:
+          BUILT_SHA: ${{ steps.pr.outputs.head_sha }}
+        run: |
+          if [ "$(git rev-parse HEAD)" != "$BUILT_SHA" ]; then
+            echo "::error::The branch moved while dist was being committed. Run this workflow again."
+            exit 1
+          fi
+      - name: Replace dist with the build output
+        run: rm -rf dist
+      - name: Download dist
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Commit and push dist if it changed
+        env:
+          HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add dist
+          if git diff --cached --quiet; then
+            echo "::notice::dist is already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # "[dependabot skip]" lets Dependabot keep rebasing the PR over this commit
+          git commit -m "[dependabot skip] Rebuild dist"
+          auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c http.extraheader="$auth_header" push origin "HEAD:refs/heads/${HEAD_REF}"

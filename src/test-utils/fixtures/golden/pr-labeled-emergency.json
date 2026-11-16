@@ -1,0 +1,45 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/pulls/159",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/repos/simplybusiness/other-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": {
+        "description": "You are free to deploy",
+        "context": "Deploy status",
+        "target_url": null,
+        "state": "success"
+      },
+      "rawBody": "{\"description\":\"You are free to deploy\",\"context\":\"Deploy status\",\"target_url\":null,\"state\":\"success\"}"
+    }
+  ],
+  "stdout": "Pull request is labeled\n=============================================\nPull request 159\nCreated success state withdescription You are free to deploy for sha 03743b2ec1b201cec2de04ebebbac6e74afab281 for url https://api.github.com/repos/simplybusiness/other-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281 with target_url \n============================================================================================\n",
+  "summary": "## Deploy Status Check!\n### :sparkles: You are free to deploy :sparkles:\n- Created success state with description You are free to deploy for sha 03743b2ec1b201cec2de04ebebbac6e74afab281 and url https://api.github.com/repos/simplybusiness/other-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281\n- description You are free to deploy for sha 03743b2ec1b201cec2de04ebebbac6e74afab281 for url https://api.github.com/repos/simplybusiness/other-app/statuses/03743b2ec1b201cec2de04ebebbac6e74afab281\n- with target_url \n \n",
+  "exitCode": 0
+}

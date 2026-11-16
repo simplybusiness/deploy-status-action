@@ -2,12 +2,8 @@ name: "Deploy Status Action"
 description: "Check if the deployment is blocked"
 author: "simplybusiness"
 runs:
-  using: 'composite'
-  steps:
-    -
-       run: |
-         bundle exec ruby lib/action.rb
-       shell: bash
+  using: "node24"
+  main: "dist/index.js"
 branding:
   icon: filter
   color: red

@@ -1,36 +1,162 @@
-name: Ruby CI
+name: CI
 
+# Branch protection requires only the final "CI" check, so jobs can be added
+# or renamed here without anyone having to change the required checks.
 on:
+  pull_request:
   push:
+    branches:
+      - master
 
 permissions:
   contents: read
 
-env:
-  CI: true
-
 jobs:
-  build:
+  unit-tests:
+    name: Unit tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
-
-    strategy:
-      matrix:
-        ruby-version: [3.3, 3.4, 4.0]
-
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true
-      - name: Install dependencies
-        run: bundle install
-      - name: rubocop
-        run: bundle exec rubocop
-      - name: Run all tests
-        run: bundle exec rspec
-        shell: bash
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+      - name: npm ci
+        run: npm ci
+      - name: Unit tests
+        run: npm run test
+
+  lockfile:
+    name: Ensure package-lock.json has been updated
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+      - name: npm ci
+        run: npm ci
+      - name: Ensure package-lock.json has been updated
+        run: |
+          npm install
+          git diff --exit-code package-lock.json
+
+  dist:
+    name: Ensure dist has been rebuilt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+      - name: npm ci
+        run: npm ci
+      # Deleting dist first means a file that ncc no longer emits shows up as
+      # a deletion instead of going unnoticed
+      - name: Build dist from scratch
+        run: |
+          rm -rf dist
+          npm run build
+      - name: Ensure dist has been rebuilt
+        run: |
+          # --text is needed because .gitattributes marks dist/** as -diff
+          if ! git diff --exit-code --ignore-space-at-eol --text dist/; then
+            echo "::error::dist/ does not match the source. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+          # git diff ignores untracked files, so check for those separately
+          untracked="$(git ls-files --others --exclude-standard dist/)"
+          if [ -n "$untracked" ]; then
+            echo "$untracked"
+            echo "::error::The build created files in dist/ that are not committed. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+      # Runs dist/index.js the way a consumer's workflow does. The credentials
+      # are not valid, so the action must report the error and still exit 0.
+      - name: Run the bundled action
+        uses: ./
+        env:
+          CLIENT_ID: not-a-client-id
+          PRIVATE_KEY: not-a-private-key
+          AIRBRAKE_KEY: ""
+      # Runs the bundle through every recorded scenario, and compares what it
+      # does with what the Ruby action did
+      - name: Compare the bundled action with the recorded behaviour
+        run: npm run test:parity
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+      - name: npm ci
+        run: npm ci
+      - name: ESLint
+        run: npm run eslint:check
+
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: ".nvmrc"
+      - name: npm ci
+        run: npm ci
+      - name: Prettier
+        run: npm run prettier:check
+
+  # The only check that branch protection requires. It runs even when a job
+  # above failed, because a required check that is skipped counts as passed.
+  ci:
+    name: CI
+    if: ${{ always() }}
+    needs:
+      - unit-tests
+      - lockfile
+      - dist
+      - eslint
+      - prettier
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check that every CI job passed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Job results: ${RESULTS}"
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Not every CI job passed"
+              exit 1
+            fi
+          done
