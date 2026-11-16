@@ -1,0 +1,155 @@
+name: Create GitHub Release
+
+on:
+  push:
+    branches:
+      - "master"
+
+permissions: {}
+
+jobs:
+  # Runs the bundle that was just merged against this repository with the real
+  # GitHub App, so that a release is only made, and the major version tag only
+  # moved, when the action works end to end.
+  verify-action:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Note the time
+        id: start
+        run: echo "epoch=$(($(date +%s) - 60))" >> "$GITHUB_OUTPUT"
+      - name: Deploy Status Action
+        uses: ./
+        env:
+          CLIENT_ID: ${{ secrets.DEPLOY_STATUS_CLIENT_ID }}
+          PRIVATE_KEY: ${{ secrets.DEPLOY_STATUS_PRIVATE_KEY }}
+          AIRBRAKE_KEY: ${{ secrets.GH_AIRBRAKE_KEY }}
+      # The action exits 0 even when it fails, so check what it did: for a push
+      # it sets the "Deploy status" commit status on the pushed commit
+      - name: Check that the action set the commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SINCE: ${{ steps.start.outputs.epoch }}
+        run: |
+          state="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/statuses" |
+            jq -r --argjson since "$SINCE" '[.[] | select(.context == "Deploy status" and (.created_at | fromdateiso8601) >= $since)][0].state // ""')"
+          if [ -z "$state" ]; then
+            echo "::error::The action did not set the Deploy status of ${GITHUB_SHA}, so nothing will be released. Check the log of the previous step."
+            exit 1
+          fi
+          echo "Deploy status is ${state}"
+
+  # Tags the commit with the version in package.json and creates the release
+  create-new-release:
+    needs: verify-action
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      released: ${{ steps.tag.outputs.released }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Get the version from package.json
+        id: get-version
+        run: |
+          version="$(jq -r .version package.json)"
+          if ! [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::The version in package.json (${version}) is not in the form 1.2.3"
+            exit 1
+          fi
+          # v1 and v2 are the Ruby action, which consumers run with setup-ruby
+          if [ "${version%%.*}" -lt 3 ]; then
+            echo "::error::Refusing to release ${version}: only v3 and later are released from this branch"
+            exit 1
+          fi
+          echo "VERSION=${version}" >> "$GITHUB_OUTPUT"
+          echo "TAG=v${version}" >> "$GITHUB_OUTPUT"
+      - name: Set git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Create Annotated Tag
+        id: tag
+        env:
+          VERSION: ${{ steps.get-version.outputs.VERSION }}
+          TAG: ${{ steps.get-version.outputs.TAG }}
+        run: |
+          if ! git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            # GitHub refuses a tag pushed with this token when the commit's
+            # workflow files differ from those now on master. The run for the
+            # newest commit on master makes the release in that case.
+            git fetch --quiet --no-tags origin refs/heads/master
+            if ! git diff --quiet "$GITHUB_SHA" FETCH_HEAD -- .github/workflows; then
+              echo "::notice::master has moved on and a workflow file has changed, so ${TAG} is left to the release run of the newest commit on master"
+              echo "released=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git tag -a "$TAG" -m "Release ${TAG}"
+            git push origin "refs/tags/${TAG}"
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          tagged_sha="$(git rev-parse "refs/tags/${TAG}^{commit}")"
+          if [ "$tagged_sha" = "$GITHUB_SHA" ]; then
+            # This is a re-run: carry on, in case the release was not created
+            # or the major version tag was not moved the first time
+            echo "::notice::${TAG} already points at this commit"
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          elif git diff --quiet "$tagged_sha" "$GITHUB_SHA" -- dist action.yml; then
+            echo "::notice::${TAG} is already released and the action has not changed since, so there is nothing to release"
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::dist/ or action.yml has changed since ${TAG}, but the version in package.json is still ${VERSION}. Bump the version to release the change."
+            exit 1
+          fi
+      - name: Create Release
+        if: steps.tag.outputs.released == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.get-version.outputs.TAG }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::notice::The ${TAG} release already exists"
+          else
+            # Start the notes from the release before this one. Left to itself,
+            # GitHub can pick a moving tag such as v3.
+            previous="$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' "${GITHUB_SHA}^")"
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes --notes-start-tag "$previous"
+          fi
+
+  # Points the major version tag (e.g. v3) at the commit that was just released
+  move-major-version-tag:
+    needs: create-new-release
+    if: needs.create-new-release.outputs.released == 'true'
+    concurrency:
+      group: release-major-tag
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Move major version tag
+        run: |
+          major="v$(jq -r .version package.json | cut -d. -f1)"
+          # Never move the tag backwards, which could otherwise happen when two
+          # releases finish out of order or an old run is run again
+          if git rev-parse -q --verify "refs/tags/${major}^{commit}" >/dev/null &&
+             ! git merge-base --is-ancestor "refs/tags/${major}^{commit}" "$GITHUB_SHA"; then
+            echo "::warning::${major} is not an ancestor of ${GITHUB_SHA}, so it has not been moved"
+            exit 0
+          fi
+          git push --force origin "${GITHUB_SHA}:refs/tags/${major}"

@@ -8,20 +8,22 @@ on:
   issues:
     types: [labeled, closed]
 
+# The action authenticates as the Deploy Status GitHub App, so the workflow
+# token is only used to check out the action
 permissions:
-  checks: read
-  issues: read
-  pull-requests: read
-  statuses: write
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # For pull_request_target this checks out the base branch, so the job runs
+      # the action that is already on master and never code from the pull
+      # request. Do not add a ref, and do not change the trigger to
+      # pull_request: the next step has the GitHub App's private key.
       - uses: actions/checkout@v7
-      - uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          persist-credentials: false
       - name: Deploy Status Action
         uses: ./
         env:

@@ -1,0 +1,49 @@
+name: "Dependabot auto approve and merge"
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  dependabot-merge-minor-patch:
+    runs-on: ubuntu-latest
+    # github.actor is checked as well as the author so that the approval is
+    # not given again after someone else (Dobby, a person) pushes to the branch
+    if: github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      # A workflow that Dependabot triggers gets a read-only token unless the
+      # permissions are raised here
+      pull-requests: write
+    steps:
+      - name: Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: "${{ github.token }}"
+      # The approval comes from github-actions[bot]. The merge is done by the
+      # app that acts on the body of the review.
+      - name: Approve and merge dependabot PRs for minor and patch updates
+        if: ${{ steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor' || steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' }}
+        run: |
+          # Running this job again keeps github.actor, so approve only the
+          # commit that Dependabot pushed, and only while nothing else is on
+          # the branch
+          current_sha="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" --jq .head.sha)"
+          foreign="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits" \
+            --jq '.[] | select(.author.login != "dependabot[bot]" or .commit.verification.verified != true) | .sha')"
+          if [ "$current_sha" != "$HEAD_SHA" ] || [ -n "$foreign" ]; then
+            echo "::notice::The branch no longer holds only what Dependabot pushed, so it is not approved"
+            exit 0
+          fi
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews" \
+            -f commit_id="$HEAD_SHA" -f event=APPROVE -f body="/backstage merge minor"
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_TOKEN: ${{ github.token }}

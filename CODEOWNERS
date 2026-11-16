@@ -1,6 +1,7 @@
 # Add your project owners info here
 # More information: https://help.github.com/articles/about-codeowners/
-* @simplybusiness/silversmiths
 
-Gemfile*  @simplybusiness/silversmiths @sb-silversmiths-bot
-.github/workflows @simplybusiness/silversmiths @sb-silversmiths-bot
+*                        @simplybusiness/silversmiths
+/.github/workflows/      @simplybusiness/silversmiths @sb-dependabot
+package.json             @simplybusiness/silversmiths @sb-dependabot
+package-lock.json        @simplybusiness/silversmiths @sb-dependabot
