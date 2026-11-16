@@ -1,0 +1,6 @@
+{
+  "requests": [],
+  "stdout": "Unexpected error occurred: key not found: \"GITHUB_REF\"\n",
+  "summary": null,
+  "exitCode": 0
+}
