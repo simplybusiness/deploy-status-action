@@ -1,0 +1,111 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/issues/160",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/pulls",
+      "query": [
+        [
+          "per_page",
+          "100"
+        ],
+        [
+          "state",
+          "open"
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/1/pulls",
+      "query": [
+        [
+          "page",
+          "2"
+        ],
+        [
+          "per_page",
+          "100"
+        ],
+        [
+          "state",
+          "open"
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/1/pulls",
+      "query": [
+        [
+          "page",
+          "2"
+        ],
+        [
+          "per_page",
+          "100"
+        ],
+        [
+          "state",
+          "open"
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/1/pulls",
+      "query": [
+        [
+          "page",
+          "2"
+        ],
+        [
+          "per_page",
+          "100"
+        ],
+        [
+          "state",
+          "open"
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "Event: labeled called\n===============================================\nUnexpected error occurred: GET http://github.test/repositories/1/pulls?page=2&per_page=100&state=open: 500 - Server Error\n",
+  "summary": null,
+  "exitCode": 0
+}

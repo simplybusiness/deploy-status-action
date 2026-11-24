@@ -1,20 +1,226 @@
 version: 2
 updates:
-  - package-ecosystem: bundler
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    # Look for `package.json` and `lock` files in the `root` directory
     directory: "/"
+
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "07:00"
-    open-pull-requests-limit: 99
+      time: "06:30"
+      timezone: "Europe/London"
+    open-pull-requests-limit: 20
     labels:
       - dependencies
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    # Groups are matched in order; a dependency joins the first group that
+    # matches it. Every group only takes minor and patch bumps, so major
+    # bumps still arrive as individual PRs for their own review.
+    groups:
+      # --- runtime dependencies -------------------------------------------
+      # These are bundled into dist/, so a bump here changes the bundle.
+      # @actions/core, @actions/github, the throttling plugin and their
+      # dependency tree
+      actions-toolkit:
+        patterns:
+          - "@actions/*"
+          - "@octokit/*"
+          - "bottleneck"
+          - "undici"
+          - "before-after-hook"
+          - "universal-user-agent"
+          - "tunnel"
+        update-types:
+          - "minor"
+          - "patch"
+      # any other runtime dependency
+      production-dependencies:
+        dependency-type: "production"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # --- build tooling ---------------------------------------------------
+      # bundler that produces dist/; a bump here can change the bundle
+      bundler:
+        patterns:
+          - "@vercel/ncc"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # --- test tooling ----------------------------------------------------
+      babel:
+        patterns:
+          - "@babel/*"
+          - "babel-preset-current-node-syntax"
+          - "@jridgewell/*"
+          - "gensync"
+          - "jsesc"
+          - "js-tokens"
+          - "json5"
+          - "convert-source-map"
+        # No update-types filter here: these are only pulled in by jest, which
+        # pins them to 7.x. With a minor/patch filter Dependabot sees Babel 8
+        # as the latest version, skips the group and opens one PR per package.
+      # jest and its babel and istanbul/coverage integration
+      jest:
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "@jest/*"
+          - "babel-jest"
+          - "babel-preset-jest"
+          - "babel-plugin-jest-hoist"
+          - "babel-plugin-istanbul"
+          - "expect"
+          - "pretty-format"
+          - "*istanbul*"
+          - "v8-to-istanbul"
+          - "collect-v8-coverage"
+          - "test-exclude"
+          - "@bcoe/*"
+          - "@sinonjs/*"
+          - "@sinclair/*"
+          - "fb-watchman"
+          - "bser"
+          - "node-int64"
+          - "cjs-module-lexer"
+          - "es-module-lexer"
+          - "@ungap/*"
+          - "pure-rand"
+          - "dedent"
+          - "emittery"
+          - "synckit"
+          - "@pkgr/*"
+          - "fdir"
+          - "write-file-atomic"
+          - "stack-utils"
+        update-types:
+          - "minor"
+          - "patch"
+      # native/wasm bindings pulled in by jest-resolve and jest-haste-map
+      native-bindings:
+        patterns:
+          - "unrs-resolver"
+          - "@unrs/*"
+          - "@napi-rs/*"
+          - "@emnapi/*"
+          - "@tybys/*"
+          - "napi-postinstall"
+          - "@parcel/*"
+          - "node-addon-api"
+          - "detect-libc"
+          - "tslib"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # --- lint and format ------------------------------------------------
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+          - "@eslint-community/*"
+          - "@humanfs/*"
+          - "@humanwhocodes/*"
+          - "espree"
+          - "esquery"
+          - "esrecurse"
+          - "estraverse"
+          - "esutils"
+          - "acorn"
+          - "acorn-jsx"
+          - "globals"
+          - "ajv"
+          - "file-entry-cache"
+          - "flat-cache"
+          - "flatted"
+          - "keyv"
+          - "json-buffer"
+          - "optionator"
+          - "levn"
+          - "prelude-ls"
+          - "type-check"
+          - "fast-levenshtein"
+          - "word-wrap"
+          - "deep-is"
+          - "ignore"
+          - "natural-compare"
+          - "json-stable-stringify-without-jsonify"
+          - "strip-json-comments"
+          - "import-fresh"
+          - "parent-module"
+          - "callsites"
+          - "resolve-from"
+          - "uri-js"
+          - "punycode"
+          - "fast-deep-equal"
+          - "json-schema-traverse"
+          - "fast-json-stable-stringify"
+        update-types:
+          - "minor"
+          - "patch"
+      formatting-and-git-hooks:
+        patterns:
+          - "prettier"
+          - "husky"
+          - "lint-staged"
+          - "tinyexec"
+          - "yaml"
+          - "string-argv"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # --- data packages and leftovers ------------------------------------
+      # browserslist and its data feeds; these bump almost every week and
+      # carry no code changes for us
+      browserslist-data:
+        patterns:
+          - "browserslist"
+          - "caniuse-lite"
+          - "electron-to-chromium"
+          - "baseline-browser-mapping"
+          - "node-releases"
+          - "update-browserslist-db"
+          - "escalade"
+          - "picocolors"
+        update-types:
+          - "minor"
+          - "patch"
+      types:
+        patterns:
+          - "@types/*"
+          - "undici-types"
+        update-types:
+          - "minor"
+          - "patch"
+      # any remaining transitive dev utility (chalk, glob, yargs, semver, ...)
+      dev-dependencies:
+        dependency-type: "development"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "07:00"
-    open-pull-requests-limit: 99
+      time: "06:30"
+      timezone: "Europe/London"
+    open-pull-requests-limit: 10
     labels:
       - dependencies
+    groups:
+      github-actions:
+        patterns:
+          - "*"

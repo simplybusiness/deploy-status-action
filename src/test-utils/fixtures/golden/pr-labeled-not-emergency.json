@@ -1,0 +1,31 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/pulls/159",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "Pull request is labeled\n=============================================\nPull request 159\n",
+  "summary": null,
+  "exitCode": 0
+}

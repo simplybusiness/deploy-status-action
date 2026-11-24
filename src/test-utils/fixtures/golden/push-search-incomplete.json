@@ -1,0 +1,36 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/search/issues",
+      "query": [
+        [
+          "q",
+          "repo:simplybusiness/other-app is:issue is:open label:\"block deploys\""
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "config event branch  refs/heads/master\nUnexpected error occurred: Search for blocking issues returned incomplete results: repo:simplybusiness/other-app is:issue is:open label:\"block deploys\"\n",
+  "summary": null,
+  "exitCode": 0
+}

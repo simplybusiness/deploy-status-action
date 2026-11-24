@@ -1,0 +1,6 @@
+{
+  "requests": [],
+  "stdout": "Unexpected error occurred: \"not-a-repository\" is invalid as a repository identifier. Use the user/repo (String) format, or the repository ID (Integer), or a hash containing :repo and :user keys.\n",
+  "summary": null,
+  "exitCode": 0
+}

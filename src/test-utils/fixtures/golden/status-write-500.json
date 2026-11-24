@@ -1,0 +1,76 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/issues/160",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/other-app/pulls",
+      "query": [
+        [
+          "per_page",
+          "100"
+        ],
+        [
+          "state",
+          "open"
+        ]
+      ],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/repos/simplybusiness/other-app/statuses/1111111111111111111111111111111111111111",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": {
+        "description": "Deploys are blocked",
+        "context": "Deploy status",
+        "target_url": null,
+        "state": "failure"
+      },
+      "rawBody": "{\"description\":\"Deploys are blocked\",\"context\":\"Deploy status\",\"target_url\":null,\"state\":\"failure\"}"
+    },
+    {
+      "method": "POST",
+      "path": "/repos/simplybusiness/other-app/statuses/2222222222222222222222222222222222222222",
+      "query": [],
+      "authorization": "token ghs_installationtoken",
+      "accept": "application/vnd.github.v3+json",
+      "body": {
+        "description": "Deploys are blocked",
+        "context": "Deploy status",
+        "target_url": null,
+        "state": "failure"
+      },
+      "rawBody": "{\"description\":\"Deploys are blocked\",\"context\":\"Deploy status\",\"target_url\":null,\"state\":\"failure\"}"
+    }
+  ],
+  "stdout": "Event: labeled called\n===============================================\nCreated failure state with description Deploys are blocked for PR 11 and url https://api.github.com/repos/simplybusiness/other-app/statuses/1111111111111111111111111111111111111111 with target_url \n============================================================================================\nUnexpected error occurred: POST http://github.test/repos/simplybusiness/other-app/statuses/2222222222222222222222222222222222222222: 500 - Server Error\n",
+  "summary": "## Deploy Status Check\n### :boom: Deploys are blocked :boom:\n- Created failure state with\n- description Deploys are blocked for PR 11 and url https://api.github.com/repos/simplybusiness/other-app/statuses/1111111111111111111111111111111111111111\n- with target_url \n",
+  "exitCode": 0
+}

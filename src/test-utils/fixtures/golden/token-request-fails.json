@@ -1,0 +1,23 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/repos/simplybusiness/important-app/installation",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/app/installations/55045987/access_tokens",
+      "query": [],
+      "authorization": "bearer <valid app jwt>",
+      "accept": "application/vnd.github.v3+json",
+      "body": null
+    }
+  ],
+  "stdout": "Unexpected error occurred: POST http://github.test/app/installations/55045987/access_tokens: 500 - \n",
+  "summary": null,
+  "exitCode": 0
+}

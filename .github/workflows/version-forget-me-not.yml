@@ -1,0 +1,21 @@
+name: Check version
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize]
+permissions:
+  contents: read
+  statuses: write
+jobs:
+  build:
+    # The action reads the version file through the API using the name of the
+    # pull request's branch, and writes a commit status. Neither works for a
+    # pull request from a fork.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: simplybusiness/version-forget-me-not@v2
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_FILE_PATH: package.json
