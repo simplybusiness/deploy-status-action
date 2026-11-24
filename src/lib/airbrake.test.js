@@ -78,7 +78,7 @@ describe("notifyAirbrake", () => {
           },
           {
             function: "",
-            file: "async file:///action/dist/index.js",
+            file: "file:///action/dist/index.js",
             line: 200,
             column: 5,
           },
