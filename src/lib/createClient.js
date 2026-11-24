@@ -78,7 +78,10 @@ export function requestPolicy({
           return response;
         } catch (error) {
           const retryAfter =
-            error.status === 429 ? retryAfterSeconds(error) : 0;
+            error.status === 429
+              ? Number(error.response?.headers?.["retry-after"])
+              : 0;
+          if (retryAfter > MAX_WAIT_SECONDS) throw error;
           if (retryAfter > 0 && rateLimitRetries < RATE_LIMIT_RETRIES) {
             rateLimitRetries += 1;
             core.warning(
