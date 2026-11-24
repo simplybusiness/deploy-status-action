@@ -33930,7 +33930,7 @@ const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import
 const NOTICES_URL = "https://api.airbrake.io/api/v3/projects/258121/notices";
 const TIMEOUT_MS = 10_000;
 const MAX_MESSAGE_LENGTH = 10_000;
-const STACK_FRAME = /^\s*at (?:(.+?) \()?(.+?):(\d+):(\d+)\)?$/;
+const STACK_FRAME = /^\s*at (?:async )?(?:(.+?) \()?(.+?):(\d+):(\d+)\)?$/;
 
 // Reports an error to Airbrake. Reporting must never change the result of
 // the step, so nothing here throws.
@@ -39484,8 +39484,10 @@ function requestPolicy({
 } = {}) {
   return (octokit) => {
     octokit.hook.wrap("request", async (request, options) => {
-      const attempts = options.method === "GET" ? retries + 1 : 1;
-      for (let attempt = 1; ; attempt += 1) {
+      const maxAttempts = options.method === "GET" ? retries + 1 : 1;
+      let retriesUsed = 0;
+      let rateLimitRetries = 0;
+      for (;;) {
         const signal = AbortSignal.timeout(timeoutMs);
         // The inner hooks are bound to this object, so it must be changed in place
         options.request.signal = signal;
@@ -39495,7 +39497,19 @@ function requestPolicy({
             throw unreadableBody(response, signal);
           return response;
         } catch (error) {
-          if (attempt >= attempts || !isRetryable(error)) throw error;
+          const retryAfter =
+            error.status === 429 ? retryAfterSeconds(error) : 0;
+          if (retryAfter > 0 && rateLimitRetries < RATE_LIMIT_RETRIES) {
+            rateLimitRetries += 1;
+            warning(
+              `GitHub rate limit reached for ${options.method} ${options.url}. Trying again in ${retryAfter} seconds.`,
+            );
+            await (0,promises_namespaceObject.setTimeout)(retryAfter * retryAfterBaseValue);
+            continue;
+          }
+          if (retriesUsed >= maxAttempts - 1 || !isRetryable(error))
+            throw error;
+          retriesUsed += 1;
           const wait = retryAfterSeconds(error) * retryAfterBaseValue;
           if (wait > 0) await (0,promises_namespaceObject.setTimeout)(wait);
         }

@@ -75,6 +75,65 @@ describe("authorization", () => {
 });
 
 describe("retries", () => {
+  it("retries a generic 429 response after Retry-After", async () => {
+    github.reset([
+      route(
+        "POST",
+        "/thing",
+        {
+          status: 429,
+          headers: { "retry-after": 1 },
+          body: { message: "Too Many Requests" },
+        },
+        created,
+      ),
+    ]);
+
+    const response = await createClient({ retryAfterBaseValue: 25 }).request(
+      "POST /thing",
+    );
+
+    expect(response.status).toBe(201);
+    expect(sent()).toHaveLength(2);
+    expect(gaps()[0]).toBeGreaterThanOrEqual(15);
+  });
+
+  it("caps the wait for a generic 429 response at two minutes", async () => {
+    github.reset([
+      route(
+        "POST",
+        "/thing",
+        {
+          status: 429,
+          headers: { "retry-after": 2000 },
+          body: { message: "Too Many Requests" },
+        },
+        created,
+      ),
+    ]);
+
+    await createClient().request("POST /thing");
+
+    expect(gaps()[0]).toBeGreaterThanOrEqual(100);
+    expect(gaps()[0]).toBeLessThan(1500);
+  });
+
+  it("gives up after three retries of a generic 429 response", async () => {
+    github.reset([
+      route("POST", "/thing", {
+        status: 429,
+        headers: { "retry-after": 1 },
+        body: { message: "Too Many Requests" },
+      }),
+    ]);
+
+    await expect(createClient().request("POST /thing")).rejects.toMatchObject({
+      status: 429,
+    });
+    expect(sent()).toHaveLength(4);
+    expect(core.warning).toHaveBeenCalledTimes(3);
+  });
+
   it("tries a GET three times when GitHub answers with a 5xx", async () => {
     github.reset([
       route(

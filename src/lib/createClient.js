@@ -64,8 +64,10 @@ export function requestPolicy({
 } = {}) {
   return (octokit) => {
     octokit.hook.wrap("request", async (request, options) => {
-      const attempts = options.method === "GET" ? retries + 1 : 1;
-      for (let attempt = 1; ; attempt += 1) {
+      const maxAttempts = options.method === "GET" ? retries + 1 : 1;
+      let retriesUsed = 0;
+      let rateLimitRetries = 0;
+      for (;;) {
         const signal = AbortSignal.timeout(timeoutMs);
         // The inner hooks are bound to this object, so it must be changed in place
         options.request.signal = signal;
@@ -75,7 +77,19 @@ export function requestPolicy({
             throw unreadableBody(response, signal);
           return response;
         } catch (error) {
-          if (attempt >= attempts || !isRetryable(error)) throw error;
+          const retryAfter =
+            error.status === 429 ? retryAfterSeconds(error) : 0;
+          if (retryAfter > 0 && rateLimitRetries < RATE_LIMIT_RETRIES) {
+            rateLimitRetries += 1;
+            core.warning(
+              `GitHub rate limit reached for ${options.method} ${options.url}. Trying again in ${retryAfter} seconds.`,
+            );
+            await sleep(retryAfter * retryAfterBaseValue);
+            continue;
+          }
+          if (retriesUsed >= maxAttempts - 1 || !isRetryable(error))
+            throw error;
+          retriesUsed += 1;
           const wait = retryAfterSeconds(error) * retryAfterBaseValue;
           if (wait > 0) await sleep(wait);
         }
