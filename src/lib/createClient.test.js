@@ -134,6 +134,26 @@ describe("retries", () => {
     expect(core.warning).toHaveBeenCalledTimes(3);
   });
 
+  it("uses the throttling plugin retry budget for a secondary-limit 429", async () => {
+    github.reset([
+      route("POST", "/thing", {
+        status: 429,
+        headers: { "retry-after": 1 },
+        body: {
+          message:
+            "You have exceeded a secondary rate limit. Please wait before trying again.",
+        },
+      }),
+    ]);
+
+    await expect(createClient().request("POST /thing")).rejects.toMatchObject({
+      status: 429,
+    });
+
+    expect(sent()).toHaveLength(4);
+    expect(core.warning).toHaveBeenCalledTimes(3);
+  });
+
   it("tries a GET three times when GitHub answers with a 5xx", async () => {
     github.reset([
       route(

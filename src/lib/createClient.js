@@ -78,7 +78,7 @@ export function requestPolicy({
           return response;
         } catch (error) {
           const retryAfter =
-            error.status === 429
+            error.status === 429 && !/secondary rate limit/i.test(error.message)
               ? Number(error.response?.headers?.["retry-after"])
               : 0;
           if (retryAfter > MAX_WAIT_SECONDS) throw error;
