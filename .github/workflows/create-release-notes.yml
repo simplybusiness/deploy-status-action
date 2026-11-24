@@ -21,9 +21,14 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Note the time
-        id: start
-        run: echo "epoch=$(($(date +%s) - 60))" >> "$GITHUB_OUTPUT"
+      - name: Snapshot existing commit statuses
+        id: statuses
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ids="$(gh api --paginate --slurp "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/statuses?per_page=100" |
+            jq -c 'add | [.[].id]')"
+          echo "ids=${ids}" >> "$GITHUB_OUTPUT"
       - name: Deploy Status Action
         uses: ./
         env:
@@ -35,12 +40,12 @@ jobs:
       - name: Check that the action set the commit status
         env:
           GH_TOKEN: ${{ github.token }}
-          SINCE: ${{ steps.start.outputs.epoch }}
+          EXISTING_STATUS_IDS: ${{ steps.statuses.outputs.ids }}
         run: |
-          state="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/statuses" |
-            jq -r --argjson since "$SINCE" '[.[] | select(.context == "Deploy status" and (.created_at | fromdateiso8601) >= $since)][0].state // ""')"
+          state="$(gh api --paginate --slurp "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/statuses?per_page=100" |
+            jq -r --argjson existing "$EXISTING_STATUS_IDS" 'add | [.[] | select(.context == "Deploy status" and .creator.type == "Bot" and ((.id as $id | ($existing | index($id)) == null)))][0].state // ""')"
           if [ -z "$state" ]; then
-            echo "::error::The action did not set the Deploy status of ${GITHUB_SHA}, so nothing will be released. Check the log of the previous step."
+            echo "::error::The action did not create a new Deploy status from a GitHub App on ${GITHUB_SHA}, so nothing will be released. Check the log of the previous step."
             exit 1
           fi
           echo "Deploy status is ${state}"
