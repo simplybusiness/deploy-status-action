@@ -93,6 +93,12 @@ jobs:
               echo "released=false" >> "$GITHUB_OUTPUT"
               exit 0
             fi
+            previous="$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' "${GITHUB_SHA}^")"
+            if git diff --quiet "$previous" "$GITHUB_SHA" -- dist action.yml; then
+              echo "::notice::${TAG} is not released because dist/ and action.yml have not changed since ${previous}"
+              echo "released=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
             git tag -a "$TAG" -m "Release ${TAG}"
             git push origin "refs/tags/${TAG}"
             echo "released=true" >> "$GITHUB_OUTPUT"
