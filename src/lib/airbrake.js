@@ -4,7 +4,7 @@ import * as core from "@actions/core";
 const NOTICES_URL = "https://api.airbrake.io/api/v3/projects/258121/notices";
 const TIMEOUT_MS = 10_000;
 const MAX_MESSAGE_LENGTH = 10_000;
-const STACK_FRAME = /^\s*at (?:(.+?) \()?(.+?):(\d+):(\d+)\)?$/;
+const STACK_FRAME = /^\s*at (?:async )?(?:(.+?) \()?(.+?):(\d+):(\d+)\)?$/;
 
 // Reports an error to Airbrake. Reporting must never change the result of
 // the step, so nothing here throws.
