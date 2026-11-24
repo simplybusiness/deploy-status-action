@@ -98,7 +98,7 @@ describe("retries", () => {
     expect(gaps()[0]).toBeGreaterThanOrEqual(15);
   });
 
-  it("caps the wait for a generic 429 response at two minutes", async () => {
+  it("does not retry a generic 429 when the requested wait exceeds two minutes", async () => {
     github.reset([
       route(
         "POST",
@@ -112,10 +112,12 @@ describe("retries", () => {
       ),
     ]);
 
-    await createClient().request("POST /thing");
+    await expect(createClient().request("POST /thing")).rejects.toMatchObject({
+      status: 429,
+    });
 
-    expect(gaps()[0]).toBeGreaterThanOrEqual(100);
-    expect(gaps()[0]).toBeLessThan(1500);
+    expect(sent()).toHaveLength(1);
+    expect(core.warning).not.toHaveBeenCalled();
   });
 
   it("gives up after three retries of a generic 429 response", async () => {
