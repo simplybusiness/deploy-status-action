@@ -22,6 +22,7 @@ jobs:
       pull-requests: read
     steps:
       - name: Download build details
+        if: github.event.workflow_run.event == 'workflow_dispatch'
         uses: actions/download-artifact@v8
         with:
           name: build-info
@@ -35,10 +36,6 @@ jobs:
           RUN_ID: ${{ github.event.workflow_run.id }}
           REPOSITORY: ${{ github.repository }}
         run: |
-          info=$(cat build-info/build-info.json)
-          pr_number=$(jq -r .pr_number <<<"$info")
-          head_ref=$(jq -r .head_ref <<<"$info")
-          built_sha=$(jq -r .head_sha <<<"$info")
           run=$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}")
           event=$(jq -r .event <<<"$run")
 
@@ -47,14 +44,21 @@ jobs:
             exit 1
           fi
           if [ "$event" = "pull_request" ]; then
-            run_pr=$(jq -r '[.pull_requests[].number] | unique | if length == 1 then .[0] else empty end' <<<"$run")
-            if [ "$run_pr" != "$pr_number" ]; then
-              echo "::error::The build artifact does not match the pull request that triggered the run"
+            if [ "$(jq -r '[.pull_requests[].number] | unique | length' <<<"$run")" != "1" ]; then
+              echo "::error::The build run does not identify exactly one pull request"
               exit 1
             fi
+            pr_number=$(jq -r '.pull_requests[0].number' <<<"$run")
+            head_ref=$(jq -r '.pull_requests[0].head.ref' <<<"$run")
+            built_sha=$(jq -r '.pull_requests[0].head.sha' <<<"$run")
           elif [ "$event" != "workflow_dispatch" ]; then
             echo "::error::Unsupported build event: ${event}"
             exit 1
+          else
+            info=$(cat build-info/build-info.json)
+            pr_number=$(jq -r .pr_number <<<"$info")
+            head_ref=$(jq -r .head_ref <<<"$info")
+            built_sha=$(jq -r .head_sha <<<"$info")
           fi
 
           pr=$(gh api "repos/${REPOSITORY}/pulls/${pr_number}")
