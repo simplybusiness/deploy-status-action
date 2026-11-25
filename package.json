@@ -1,6 +1,6 @@
 {
   "name": "deploy-status-action",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Check if the deployment is blocked",
   "main": "index.js",
   "scripts": {
